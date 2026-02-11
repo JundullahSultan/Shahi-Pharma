@@ -89,7 +89,7 @@ exports.createOrder = async (req, res) => {
 
 exports.userLogut = (req, res) => {
   res.clearCookie('token');
-  res.redirect('/user/login');
+  res.redirect('/');
 };
 
 exports.getMyOrders = async (req, res) => {

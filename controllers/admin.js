@@ -3,10 +3,7 @@ const Medicine = require('../models/Medicines.js');
 const Order = require('../models/Orders.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const multer = require('multer');
-
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = require('../config/cloudinary');
 
 // Upload image middleware
 exports.uploadImage = upload.single('imageURL');
@@ -72,6 +69,7 @@ exports.sendUsersPage = async (req, res) => {
 exports.sendOrdersPage = async (req, res) => {
   try {
     const orders = await Order.find()
+      .sort({ createAt: -1 })
       .populate('user', 'name')
       .populate('medicineId', 'name');
 
@@ -88,7 +86,7 @@ exports.sendOrdersPage = async (req, res) => {
 
 exports.sendMedicinesPage = async (req, res) => {
   try {
-    const medicines = await Medicine.find();
+    const medicines = await Medicine.find().sort({ createAt: -1 });
 
     res.render('admin-medicines', { medicines });
   } catch (err) {
@@ -133,7 +131,7 @@ exports.loginAdmin = async (req, res) => {
 
 exports.logoutAdmin = (req, res) => {
   res.clearCookie('token');
-  res.redirect('/admin/login');
+  res.redirect('/');
 };
 
 exports.deleteUser = async (req, res) => {
@@ -160,10 +158,18 @@ exports.createMedicine = async (req, res) => {
     const { name, companyName, price, stockQuantity } = req.body;
     let imageString = '';
 
-    // Check if file uploaded
+    // OLD WAY: Converting Buffer to Base64 (DELETE THIS)
+    // if (req.file) {
+    //   const base64Image = req.file.buffer.toString('base64');
+    //   imageString = `data:${req.file.mimetype};base64,${base64Image}`;
+    // }
+
+    // NEW WAY: Just get the URL from Cloudinary
     if (req.file) {
-      const base64Image = req.file.buffer.toString('base64');
-      imageString = `data:${req.file.mimetype};base64,${base64Image}`;
+      imageString = req.file.path;
+    } else {
+      // Optional: Set a default placeholder if no image uploaded
+      imageString = 'https://placehold.co/400?text=No+Image';
     }
 
     const newMedicine = new Medicine({
@@ -171,7 +177,7 @@ exports.createMedicine = async (req, res) => {
       companyName,
       price,
       stockQuantity,
-      imageURL: imageString,
+      imageURL: imageString, // Saves the Cloudinary URL
     });
 
     await newMedicine.save();
@@ -211,30 +217,25 @@ exports.deleteMedicine = async (req, res) => {
 exports.updateMedicine = async (req, res) => {
   try {
     const { id } = req.params;
-    // req.body contains text fields, req.file contains the image (if uploaded)
     const { name, companyName, price, stockQuantity } = req.body;
 
-    // 1. Find the existing medicine
     const medicine = await Medicine.findById(id);
     if (!medicine) {
       return res.status(404).json({ message: 'Medicine not found' });
     }
 
-    // 2. Update text fields
+    // Update text fields
     medicine.name = name;
     medicine.companyName = companyName;
     medicine.price = price;
     medicine.stockQuantity = stockQuantity;
 
-    // 3. Check if a NEW image was uploaded
+    // Check if a NEW image was uploaded
     if (req.file) {
-      // Convert new image to Base64
-      const base64Image = req.file.buffer.toString('base64');
-      medicine.imageURL = `data:${req.file.mimetype};base64,${base64Image}`;
+      // NEW WAY: Just use the path
+      medicine.imageURL = req.file.path;
     }
-    // If NO file was uploaded, medicine.imageURL stays the same (we don't overwrite it)
 
-    // 4. Save changes
     await medicine.save();
 
     res.status(200).json({ message: 'Medicine updated successfully' });

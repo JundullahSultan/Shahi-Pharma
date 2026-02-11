@@ -43,6 +43,7 @@
 
       .nav-links {
         display: flex;
+        align-items: center;
         gap: 2rem;
       }
 
@@ -55,6 +56,14 @@
 
       .nav-links a:hover {
         color: #fff;
+      }
+
+      .highlight-text {
+        background-color: var(--warning);
+        color: var(--bg-dark);
+        padding: 1px 5px;
+        border-radius: 9px;
+        white-space: nowrap;
       }
 
       /* 2. Hero Section */
@@ -230,10 +239,8 @@
         }
         .landing-nav {
           padding: 1rem;
-        }
-        .nav-links {
           display: none;
-        } /* Hide links on mobile for simplicity */
+        }
       }
     </style>
   </head>
@@ -254,13 +261,14 @@
       <div class="hero-content">
         <h1>Supply Your Pharmacy.<br />Simplify Your Business.</h1>
         <p>
-          The all-in-one B2B marketplace connecting pharmacies directly to
-          suppliers. Streamline orders, track inventory, and grow your business
-          with PharmaB2B.
+          The all-in-one
+          <span class="highlight-text">Shahi Pharma marketplace</span>
+          connecting pharmacies directly to suppliers. Streamline orders, track
+          inventory, and grow your business with Shahi Pharma.
         </p>
         <div class="hero-btns">
-          <a href="/user/login" class="btn-primary-lg">Get Started</a>
-          <a href="#features" class="btn-glass">Learn More</a>
+          <a href="/admin/login" class="btn-primary-lg">Admin Login </a>
+          <a href="/user/login" class="btn-glass">User Login</a>
         </div>
       </div>
     </section>

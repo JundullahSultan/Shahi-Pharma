@@ -106,15 +106,27 @@
                                     <span class="badge <%= order.status %>"><%= order.status %></span>
                                 </td>
                                 <td>
-                                    <% if(order.status.toLowerCase() === 'pending') { %>
-                                        <div class="actions">
-                                            <button class="btn-icon approve" title="Approve"><i class="ph ph-check"></i></button>
-                                            <button class="btn-icon cancel" title="Cancel"><i class="ph ph-x"></i></button>
-                                        </div>
-                                    <% } else { %>
-                                        <span class="text-muted">-</span>
-                                    <% } %>
-                                </td>
+                                <% if(order.status.toLowerCase() === 'pending') { %>
+                                    <div class="actions" id="actions-<%= order._id %>">
+                                        
+                                        <button class="btn-icon approve status-btn" 
+                                                title="Approve"
+                                                data-id="<%= order._id %>"
+                                                data-status="approved">
+                                            <i class="ph ph-check"></i>
+                                        </button>
+                                        
+                                        <button class="btn-icon cancel status-btn" 
+                                                title="Cancel"
+                                                data-id="<%= order._id %>"
+                                                data-status="cancelled">
+                                            <i class="ph ph-x"></i>
+                                        </button>
+                                    </div>
+                                <% } else { %>
+                                    <span class="text-muted">-</span>
+                                <% } %>
+                            </td>
                             </tr>
                             <% }) %>
                         </tbody>
@@ -197,6 +209,8 @@
         }
     });
 </script>
+<div id="toast-container"></div>
+<script src="/js/admin-orders.js"></script>
     <script src="/js/admin.js"></script>
     <script src="/js/theme-toggle.js"></script>
     <script src="/js/distroyGoBack.js"></script>
