@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Marketplace | PharmaB2B</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=SUSE:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/admin-style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo"><i class="ph ph-pill"></i><span>PharmaStore</span></div>
+            <nav>
+                <a href="/user/dashboard" class="active"><i class="ph ph-storefront"></i> Marketplace</a>
+                <a href="/user/orders"><i class="ph ph-package"></i> My Orders</a>
+            </nav>
+            <div class="logout"><a href="/user/logout"><i class="ph ph-sign-out"></i> Logout</a></div>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>Available Medicines</h1>
+                <div class="user-profile"><span><%= user.name %></span><div class="avatar">U</div></div>
+            </header>
+
+            <div class="medicine-grid">
+                <% medicines.forEach(med => { %>
+                    <div class="card product-card">
+                        <div class="product-img">
+                            <img src="<%= med.imageURL %>" alt="<%= med.name %>">
+                        </div>
+                        
+                        <div class="product-info">
+                            <h3><%= med.name %></h3>
+                            <p class="company"><%= med.companyName %></p>
+                            <div class="price-row">
+                                <span class="price">؋  <%= med.price %></span>
+                                <span class="stock"><%= med.stock %> in stock</span>
+                            </div>
+
+                            <form class="order-form"> 
+                                <input type="hidden" name="user" value="<%= user.id %>">
+                                <input type="hidden" name="price" value="<%= med.price %>">
+
+                                <input type="hidden" name="medicineId" value="<%= med._id %>">
+                                
+                                <div class="qty-control">
+                                    <label>Qty:</label>
+                                    <input type="number" name="quantity" min="1" max="<%= med.stock %>" value="1" required>
+                                </div>
+
+                                <button type="submit" class="btn-primary btn-sm">
+                                    Place Order
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </main>
+<nav class="mobile-bottom-nav">
+    <a href="/user/dashboard" class="nav-item">
+        <i class="ph ph-squares-four"></i>
+        <span>Home</span>
+    </a>
+
+    <a href="/user/orders" class="nav-item">
+        <i class="ph ph-package"></i>
+        <span>Orders</span>
+    </a>
+
+    <a href="/user/logout" class="nav-item">
+        <i class="ph ph-sign-out"></i>
+        <span>Exit</span>
+    </a>
+</nav>
+<script>
+    // This highlights the icon that matches the current page URL
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.mobile-bottom-nav a').forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        }
+    });
+</script>
+    <script src="/js/distroyGoBack.js"></script>
+    <script src="/js/user-medicine.js"></script>
+</body>
+</html>

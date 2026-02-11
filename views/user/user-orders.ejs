@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | PharmaStore</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=SUSE:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/admin-style.css">
+    <style>
+        /* Small tweak for the medicine info column */
+        .med-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .med-thumb {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 6px;
+            background: var(--surface-light);
+            border: 1px solid var(--border);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo"><i class="ph ph-pill"></i><span>PharmaStore</span></div>
+            <nav>
+                <a href="/user/dashboard"><i class="ph ph-storefront"></i> Marketplace</a>
+                <a href="/user/orders" class="active"><i class="ph ph-package"></i> My Orders</a>
+            </nav>
+            <div class="logout"><a href="/user/logout"><i class="ph ph-sign-out"></i> Logout</a></div>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1>My Order History</h1>
+                <div class="user-profile">
+                    <span><%= userName %></span>
+                    <div class="avatar"><%= userName[0] %></div>
+                </div>
+            </header>
+
+            <section class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Medicine</th> <th>Date</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (orders && orders.length > 0) { %>
+                            <% orders.forEach(order => { %>
+                            <tr>
+                                <td>
+                                    <span class="text-muted">#<%= order._id.toString().slice(-6).toUpperCase() %></span>
+                                </td>
+
+                                <td>
+                                    <% if (order.medicineId) { %>
+                                        <div class="med-info">
+                                            <img src="<%= order.medicineId.imageURL %>" alt="" class="med-thumb">
+                                            <span><%= order.medicineId.name %></span>
+                                        </div>
+                                    <% } else { %>
+                                        <span class="text-danger">Item Unavailable</span>
+                                    <% } %>
+                                </td>
+
+                                <td>
+                                    <%= new Date(order.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+                                </td>
+
+                                <td><%= order.quantity %></td>
+
+                                <td>$<%= order.totalPrice.toFixed(2) %></td>
+
+                                <td>
+                                    <span class="badge <%= order.status.toLowerCase() %>">
+                                        <%= order.status %>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <% if(order.status === 'Pending') { %>
+                                        <form action="/user/order/cancel" method="POST" onsubmit="return confirm('Cancel this order?');">
+                                            <input type="hidden" name="orderId" value="<%= order._id %>">
+                                            <button type="submit" class="btn-icon cancel" title="Cancel Order">
+                                                <i class="ph ph-x"></i>
+                                            </button>
+                                        </form>
+                                    <% } else { %>
+                                        <span class="text-muted">-</span>
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="7">
+                                    <div class="empty-state">
+                                        <i class="ph ph-shopping-cart"></i>
+                                        <p>No orders found yet.</p>
+                                        <a href="/user/medicines" class="btn-text">Go to Marketplace</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+    <nav class="mobile-bottom-nav">
+    <a href="/user/dashboard" class="nav-item">
+        <i class="ph ph-squares-four"></i>
+        <span>Home</span>
+    </a>
+    
+    <a href="/user/orders" class="nav-item">
+        <i class="ph ph-package"></i>
+        <span>Orders</span>
+    </a>
+
+    <a href="/user/logout" class="nav-item">
+        <i class="ph ph-sign-out"></i>
+        <span>Exit</span>
+    </a>
+</nav>
+<script>
+    // This highlights the icon that matches the current page URL
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.mobile-bottom-nav a').forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        }
+    });
+</script>
+</body>
+</html>

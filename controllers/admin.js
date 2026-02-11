@@ -1,0 +1,281 @@
+const User = require('../models/Users.js');
+const Medicine = require('../models/Medicines.js');
+const Order = require('../models/Orders.js');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const multer = require('multer');
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+// Upload image middleware
+exports.uploadImage = upload.single('imageURL');
+
+exports.createUser = async (req, res) => {
+  const { name, pharmacy, email, password, role } = req.body;
+
+  // Hashing Passowrd
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  try {
+    const newUser = new User({
+      name,
+      pharmacy,
+      email,
+      password: hashedPassword,
+      role,
+    });
+
+    await newUser.save();
+    res
+      .status(201)
+      .json({ status: 'success', message: 'User created successfully' });
+  } catch (err) {
+    res.status(400).send('Error creating user: ' + err.message);
+  }
+};
+
+exports.sendDashboard = async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    const totalMedicines = await Medicine.countDocuments();
+    const totalOrders = await Order.countDocuments();
+    const pendingOrders = await Order.countDocuments({ status: 'pending' });
+    const approvedOrders = await Order.countDocuments({ status: 'approved' });
+    const cancelledOrders = await Order.countDocuments({ status: 'cancelled' });
+
+    const orders = await Order.find()
+      .sort({ createAt: -1 })
+      .limit(5)
+      .populate('user', 'name')
+      .populate('medicineId', 'name');
+
+    res.render('admin-dashboard', {
+      totalUsers,
+      totalMedicines,
+      orders,
+      totalOrders,
+      pendingOrders,
+      approvedOrders,
+      cancelledOrders,
+    });
+  } catch (err) {
+    res.send(err);
+  }
+};
+
+exports.sendUsersPage = async (req, res) => {
+  const users = await User.find({});
+  res.render('admin-users', { users });
+};
+
+exports.sendOrdersPage = async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .populate('user', 'name')
+      .populate('medicineId', 'name');
+
+    const orderDate = new Date(orders.createdAt).toLocaleDateString('en-US', {
+      timeZone: 'UTC',
+    });
+
+    res.render('admin-orders', { orders, orderDate });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+exports.sendMedicinesPage = async (req, res) => {
+  try {
+    const medicines = await Medicine.find();
+
+    res.render('admin-medicines', { medicines });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+exports.login = (req, res) => {
+  res.render('admin-login');
+};
+
+exports.loginAdmin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // 1. Find the user
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // 2. Compare hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch)
+      return res.status(401).json({ message: 'Invalid credentials' });
+
+    // 3. Sign jwt
+    const payload = { id: user._id, username: user.name, role: user.role };
+    const token = jwt.sign(payload, process.env.JWT_SECRET);
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 1000 * 60 * 60,
+    });
+
+    res.redirect('/admin/dashboard');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server error');
+  }
+};
+
+exports.logoutAdmin = (req, res) => {
+  res.clearCookie('token');
+  res.redirect('/admin/login');
+};
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser)
+      return res.status(404).json({ message: 'User not found' });
+
+    res.status(200).json({ message: 'User deleted successfully!' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// ==========================================
+//  EXISTING: CREATE MEDICINE
+// ==========================================
+exports.createMedicine = async (req, res) => {
+  try {
+    const { name, companyName, price, stockQuantity } = req.body;
+    let imageString = '';
+
+    // Check if file uploaded
+    if (req.file) {
+      const base64Image = req.file.buffer.toString('base64');
+      imageString = `data:${req.file.mimetype};base64,${base64Image}`;
+    }
+
+    const newMedicine = new Medicine({
+      name,
+      companyName,
+      price,
+      stockQuantity,
+      imageURL: imageString,
+    });
+
+    await newMedicine.save();
+
+    res
+      .status(201)
+      .json({ status: 'success', message: 'Medicine created successfully!' });
+  } catch (error) {
+    console.error(error);
+    res.status(401).json({ message: `Error: ${error.message}` });
+  }
+};
+
+// ==========================================
+//  NEW: DELETE MEDICINE
+// ==========================================
+exports.deleteMedicine = async (req, res) => {
+  try {
+    const { id } = req.params; // Get ID from URL (/admin/medicines/:id)
+
+    const deleted = await Medicine.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return res.status(404).json({ message: 'Medicine not found' });
+    }
+
+    res.status(200).json({ message: 'Medicine deleted successfully' });
+  } catch (error) {
+    console.error('Delete Error:', error);
+    res.status(500).json({ message: 'Server error during deletion' });
+  }
+};
+
+// ==========================================
+//  NEW: UPDATE MEDICINE
+// ==========================================
+exports.updateMedicine = async (req, res) => {
+  try {
+    const { id } = req.params;
+    // req.body contains text fields, req.file contains the image (if uploaded)
+    const { name, companyName, price, stockQuantity } = req.body;
+
+    // 1. Find the existing medicine
+    const medicine = await Medicine.findById(id);
+    if (!medicine) {
+      return res.status(404).json({ message: 'Medicine not found' });
+    }
+
+    // 2. Update text fields
+    medicine.name = name;
+    medicine.companyName = companyName;
+    medicine.price = price;
+    medicine.stockQuantity = stockQuantity;
+
+    // 3. Check if a NEW image was uploaded
+    if (req.file) {
+      // Convert new image to Base64
+      const base64Image = req.file.buffer.toString('base64');
+      medicine.imageURL = `data:${req.file.mimetype};base64,${base64Image}`;
+    }
+    // If NO file was uploaded, medicine.imageURL stays the same (we don't overwrite it)
+
+    // 4. Save changes
+    await medicine.save();
+
+    res.status(200).json({ message: 'Medicine updated successfully' });
+  } catch (error) {
+    console.error('Update Error:', error);
+    res.status(500).json({ message: 'Server error during update' });
+  }
+};
+
+// ==========================================
+//  NEW: UPDATE ORDER STATUS
+// ==========================================
+exports.updateOrderStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body; // 'approved' or 'cancelled'
+
+    // 1. Validate Status
+    const validStatuses = ['approved', 'cancelled'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Invalid status update' });
+    }
+
+    // 2. Find and Update
+    // { new: true } returns the updated document, though we don't strictly need it here
+    const order = await Order.findByIdAndUpdate(
+      id,
+      { status: status },
+      { new: true },
+    );
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.status(200).json({
+      message: `Order marked as ${status}`,
+      order: order,
+    });
+  } catch (error) {
+    console.error('Order Update Error:', error);
+    res.status(500).json({ message: 'Server error updating order' });
+  }
+};

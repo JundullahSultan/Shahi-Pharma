@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PharmaB2B | The Future of Pharmacy Supply</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=SUSE:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles/admin-style.css" />
+    <style>
+      /* --- Landing Page Specific Styles --- */
+
+      /* 1. Navbar */
+      .landing-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 3rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 100;
+        background: rgba(15, 23, 42, 0.6); /* Semi-transparent */
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--glass-border);
+      }
+
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #fff;
+        text-shadow: 0 0 20px var(--primary-glow);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+      }
+
+      .nav-links a {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-weight: 500;
+        transition: 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: #fff;
+      }
+
+      /* 2. Hero Section */
+      .hero {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0 2rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Glowing Blobs for Background Ambience */
+      .hero::before {
+        content: '';
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        width: 400px;
+        height: 400px;
+        background: var(--primary);
+        filter: blur(150px);
+        opacity: 0.2;
+        border-radius: 50%;
+        z-index: -1;
+        animation: pulseBlob 8s infinite alternate;
+      }
+
+      .hero::after {
+        content: '';
+        position: absolute;
+        bottom: 20%;
+        right: 20%;
+        width: 300px;
+        height: 300px;
+        background: var(--success);
+        filter: blur(120px);
+        opacity: 0.15;
+        border-radius: 50%;
+        z-index: -1;
+        animation: pulseBlob 10s infinite alternate-reverse;
+      }
+
+      .hero-content {
+        max-width: 800px;
+        z-index: 2;
+      }
+
+      .hero h1 {
+        font-size: 4rem;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .hero p {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+      }
+
+      .hero-btns {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+      }
+
+      .btn-glass {
+        padding: 16px 32px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        color: #fff;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s;
+        backdrop-filter: blur(10px);
+      }
+
+      .btn-glass:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-primary-lg {
+        padding: 16px 32px;
+        background: linear-gradient(135deg, var(--primary), #7c3aed);
+        color: white;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 0 20px var(--primary-glow);
+        transition: all 0.3s;
+      }
+
+      .btn-primary-lg:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 40px var(--primary-glow);
+      }
+
+      /* 3. Features Grid */
+      .features {
+        padding: 4rem 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .feature-card {
+        background: var(--surface-dark);
+        border: 1px solid var(--glass-border);
+        padding: 2rem;
+        border-radius: 20px;
+        backdrop-filter: blur(20px);
+        transition: transform 0.3s;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--primary);
+      }
+
+      .feature-icon {
+        font-size: 2.5rem;
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+        background: rgba(99, 102, 241, 0.1);
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+      }
+
+      .feature-card h3 {
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+      }
+
+      .feature-card p {
+        color: var(--text-muted);
+        line-height: 1.6;
+      }
+
+      @keyframes pulseBlob {
+        0% {
+          transform: scale(1);
+          opacity: 0.2;
+        }
+        100% {
+          transform: scale(1.1);
+          opacity: 0.3;
+        }
+      }
+
+      /* Responsive Fixes */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+        .landing-nav {
+          padding: 1rem;
+        }
+        .nav-links {
+          display: none;
+        } /* Hide links on mobile for simplicity */
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="landing-nav">
+      <div class="nav-logo">
+        <i class="ph ph-pill"></i>
+        <span>PharmaB2B</span>
+      </div>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#about">About</a>
+        <a href="/login" class="btn-glass" style="padding: 8px 20px">Login</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Supply Your Pharmacy.<br />Simplify Your Business.</h1>
+        <p>
+          The all-in-one B2B marketplace connecting pharmacies directly to
+          suppliers. Streamline orders, track inventory, and grow your business
+          with PharmaB2B.
+        </p>
+        <div class="hero-btns">
+          <a href="/user/login" class="btn-primary-lg">Get Started</a>
+          <a href="#features" class="btn-glass">Learn More</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="ph ph-rocket-launch"></i></div>
+          <h3>Fast Delivery</h3>
+          <p>
+            Order today and get your supplies delivered within 24 hours. We
+            prioritize speed so you never run out of stock.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="ph ph-shield-check"></i></div>
+          <h3>Verified Quality</h3>
+          <p>
+            All medicines are sourced from certified manufacturers. We guarantee
+            100% authentic products for your customers.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="ph ph-chart-line-up"></i></div>
+          <h3>Track Growth</h3>
+          <p>
+            Use our advanced dashboard to track your order history, spending,
+            and inventory levels in real-time.
+          </p>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

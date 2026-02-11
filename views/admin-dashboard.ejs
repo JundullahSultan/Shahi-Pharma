@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Admin Dashboard | PharmaB2B</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=SUSE:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/admin-style.css">
+</head>
+<body>
+   <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="ph ph-pill"></i>
+                <span>PharmaAdmin</span>
+            </div>
+            <nav>
+                <a href="#" class="active"><i class="ph ph-squares-four"></i> Dashboard</a>
+                <a href="/admin/users"><i class="ph ph-users"></i> Users</a>
+                <a href="/admin/medicines"><i class="ph ph-flask"></i> Medicines</a>
+                <a href="/admin/orders"><i class="ph ph-package"></i> Orders</a>
+            </nav>
+            <div class="logout">
+                <a href="/admin/logout"><i class="ph ph-sign-out"></i> Logout</a>
+            </div>
+        </aside>
+        
+        <main class="main-content">
+            <header>
+                <h1>Dashboard Overview</h1>
+                <div class="user-profile">
+                    <span><%= adminName %></span>
+                    <div class="avatar"><%= adminName[0].toUpperCase() %></div>
+                </div>
+            </header>
+
+            <section class="stats-grid">
+                <div class="card stat-card">
+                    <div class="icon-box blue"><i class="ph ph-users"></i></div>
+                    <div>
+                        <h3><%= totalUsers %></h3>
+                        <p>Total Users</p>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="icon-box purple"><i class="ph ph-flask"></i></div>
+                    <div>
+                        <h3><%= totalMedicines %></h3>
+                        <p>Total Medicines</p>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="icon-box green"><i class="ph ph-shopping-cart"></i></div>
+                    <div>
+                        <h3><%= totalOrders %></h3>
+                        <p>Total Orders</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="breakdown-grid">
+                <div class="card breakdown-card pending">
+                    <span>Pending</span>
+                    <h2><%= pendingOrders %></h2>
+                </div>
+                <div class="card breakdown-card approved">
+                    <span>Approved</span>
+                    <h2><%= approvedOrders %></h2>
+                </div>
+                <div class="card breakdown-card cancelled">
+                    <span>Cancelled</span>
+                    <h2><%= cancelledOrders %></h2>
+                </div>
+            </section>
+
+            <div class="content-split">
+                <section class="card recent-orders">
+                    <div class="card-header">
+                        <h2>Recent Orders</h2>
+                        <button class="btn-text"><a href="/admin/orders">View All</a></button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Medicine Name</th>
+                                <th>Pharmacy</th>
+                                <th>Date</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% orders.forEach(order => { %>
+                            <tr>
+                                <td><%= order.medicineId.name %></td>
+                                <td><%= order.user.name %></td>
+                                <!-- Formatting the date -->
+                                <% const orderDate = new Date(order.createdAt).toLocaleDateString('en-US') %>
+                                <td><%= orderDate %></td>
+                                <td><%= order.totalPrice %> &#1547</td>
+                                <td>
+                                    <span class="badge <%= order.status %>"><%= order.status %></span>
+                                </td>
+                                <td>
+                                    <% if(order.status.toLowerCase() === 'pending') { %>
+                                        <div class="actions">
+                                            <button class="btn-icon approve" title="Approve"><i class="ph ph-check"></i></button>
+                                            <button class="btn-icon cancel" title="Cancel"><i class="ph ph-x"></i></button>
+                                        </div>
+                                    <% } else { %>
+                                        <span class="text-muted">-</span>
+                                    <% } %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="card create-user">
+                    <div class="card-header">
+                        <h2>Create New User</h2>
+                    </div>
+                    <form id="createUserForm">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" name="name" placeholder="e.g. John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Pharmacy Name</label>
+                            <input type="text" name="pharmacy" placeholder="pharmacy@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="email" placeholder="pharmacy@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" name="password" placeholder="••••••••" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <div class="radio-group">
+                                <label class="radio-box">
+                                    <input type="radio" name="role" value="user" checked>
+                                    <span>Pharmacy</span>
+                                </label>
+                                <label class="radio-box">
+                                    <input type="radio" name="role" value="admin">
+                                    <span>Admin</span>
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Create Account</button>
+                    </form>
+                </section>
+            </div>
+        </main>
+    </div>
+    <nav class="mobile-bottom-nav">
+    <a href="/admin/dashboard" class="nav-item">
+        <i class="ph ph-squares-four"></i>
+        <span>Home</span>
+    </a>
+    
+    <a href="/admin/users" class="nav-item">
+        <i class="ph ph-users"></i>
+        <span>Users</span>
+    </a>
+
+    <a href="/admin/medicines" class="nav-item">
+        <div class="fab"><i class="ph ph-plus"></i></div>
+        <span>Meds</span>
+    </a>
+
+    <a href="/admin/orders" class="nav-item">
+        <i class="ph ph-package"></i>
+        <span>Orders</span>
+    </a>
+
+    <a href="/admin/logout" class="nav-item">
+        <i class="ph ph-sign-out"></i>
+        <span>Exit</span>
+    </a>
+</nav>
+
+<script>
+    // This highlights the icon that matches the current page URL
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.mobile-bottom-nav a').forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        }
+    });
+</script>
+    <script src="/js/admin.js"></script>
+    <script src="/js/theme-toggle.js"></script>
+    <script src="/js/distroyGoBack.js"></script>
+</body>
+</html>
