@@ -86,4 +86,18 @@ router.delete(
   adminController.deleteMedicine,
 );
 
+// Add these lines:
+router.get(
+  '/requests',
+  authentication.verifyAdmin,
+  adminController.getRequests,
+);
+router.put(
+  '/requests/:id/status',
+  authentication.verifyAdmin,
+  adminController.updateRequestStatus,
+);
+
+module.exports = router;
+
 module.exports = router;

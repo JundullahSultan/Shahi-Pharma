@@ -1,83 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Users | PharmaAdmin</title>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script defer src="/js/distroyGoBack.js"></script>
-    <script defer src="/js/admin-user.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=SUSE:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles/admin-style.css">
-</head>
-<body>
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="logo"><i class="ph ph-pill"></i><span>PharmaAdmin</span></div>
-            <nav>
-                <a href="/admin/dashboard"><i class="ph ph-squares-four"></i> Dashboard</a>
-                <a href="/admin/users" class="active"><i class="ph ph-users"></i> Users</a>
-                <a href="/admin/medicines"><i class="ph ph-flask"></i> Medicines</a>
-                <a href="/admin/orders"><i class="ph ph-package"></i> Orders</a>
-            </nav>
-            <div class="logout"><a href="/admin/logout"><i class="ph ph-sign-out"></i> Logout</a></div>
-        </aside>
-
-        <main class="main-content">
-            <header>
-                <h1>User Management</h1>
-                <div class="user-profile"><span><%= adminName %></span><div class="avatar"><%= adminName[0].toUpperCase() %></div></div>
-            </header>
-
+<%- include('partials/admin-header', { title: t.adminUsers.title, page: 'users' }) %>
             <div class="toolbar">
                 <div class="search-bar">
                     <i class="ph ph-magnifying-glass"></i>
-                    <input type="text" id="searchInput" placeholder="Search users...">
+                    <input type="text" id="searchInput" placeholder="<%= t.adminUsers.searchPlaceholder %>">
+                
                 </div>
-                <button class="btn-primary" style="width: auto; margin:0;">+ Add New User</button>
+                <button class="btn-primary" style="width: auto; margin:0;"><%= t.adminUsers.addNew %></button>
             </div>
 
             <section class="card">
                 <table>
                     <thead>
+                
                         <tr>
-                            <th>Name</th>
-                            <th>Pharmacy Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Joined</th>
-                            <th>Actions</th>
+                            <th><%= t.common.name %></th>
+                            <th><%= t.auth.pharmacyName %></th>
+                            <th><%= t.common.email %></th>
+       
+                            <th><%= t.common.role %></th>
+                            <th><%= t.adminUsers.joined %></th>
+                            <th><%= t.common.actions %></th>
+                       
                         </tr>
                     </thead>
                     <tbody>
                         <% users.forEach(user => { %>
                         <tr id="row-<%= user._id %>">
+    
                             <td>
                                 <div class="user-info">
                                     <div class="avatar-sm"><%= user.name[0] %></div>
+    
                                     <span><%= user.name %></span>
                                 </div>
                             </td>
+      
                             <td><%= user.pharmacy %></td>
                             <td><%= user.email %></td>
                             <td>
+                  
                                 <span class="badge <%= user.role === 'admin' ? 'approved' : 'pending' %>">
                                     <%= user.role %>
                                 </span>
+                           
                             </td>
                             <td><%= user.joined %></td>
                             <td>
                                 <div class="actions">
-                                    <button class="btn-icon cancel" title="Delete User" onclick="deleteUser('<%= user._id%>')"><i class="ph ph-trash"></i></button>
+        
+                                    <button class="btn-icon cancel" title="<%= t.common.delete %>" onclick="deleteUser('<%= user._id%>')"><i class="ph ph-trash"></i></button>
                                 </div>
                             </td>
+    
                         </tr>
                         <% }) %>
                     </tbody>
                 </table>
             </section>
+      
         </main>
     </div>
 
@@ -88,38 +68,40 @@
         <div class="modal-icon danger">
             <i class="ph ph-warning-circle"></i>
         </div>
-        <h3>Delete User?</h3>
-        <p>This action cannot be undone. The user will be permanently removed.</p>
+        <h3><%= t.adminUsers.deleteModalTitle %></h3>
+        <p><%= t.adminUsers.deleteWarning %></p>
         <div class="modal-actions">
-            <button id="cancelBtn" class="btn-text">Cancel</button>
-            <button id="confirmDeleteBtn" class="btn-danger">Yes, Delete</button>
+            <button id="cancelBtn" class="btn-text"><%= t.common.cancel %></button>
+            <button id="confirmDeleteBtn" class="btn-danger"><%= t.common.yesDelete %></button>
         </div>
     </div>
 </dialog>
 <nav class="mobile-bottom-nav">
     <a href="/admin/dashboard" class="nav-item">
         <i class="ph ph-squares-four"></i>
-        <span>Home</span>
+        <span><%= t.home %></span>
     </a>
     
     <a href="/admin/users" class="nav-item">
+      
         <i class="ph ph-users"></i>
-        <span>Users</span>
+        <span><%= t.users %></span>
     </a>
 
     <a href="/admin/medicines" class="nav-item">
         <div class="fab"><i class="ph ph-plus"></i></div>
-        <span>Meds</span>
+        <span><%= t.meds %></span>
     </a>
 
     <a href="/admin/orders" class="nav-item">
         <i class="ph ph-package"></i>
-        <span>Orders</span>
+        <span><%= t.orders %></span>
     </a>
 
     <a href="/admin/logout" class="nav-item">
         <i class="ph ph-sign-out"></i>
-        <span>Exit</span>
+        <span><%= t.exit %></span>
+   
     </a>
 </nav>
 
@@ -132,5 +114,46 @@
         }
     });
 </script>
-</body>
-</html>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const htmlEl = document.documentElement;
+
+            // 1. Load Saved Theme
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+           
+            if (savedTheme === 'light') applyLight();
+            else applyDark();
+
+            // 2. Toggle Logic
+            if(toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    const currentTheme = htmlEl.getAttribute('data-theme');
+            
+                    if (currentTheme === 'light') applyDark();
+                    else applyLight();
+                });
+            }
+
+            function applyLight() {
+                htmlEl.setAttribute('data-theme', 'light');
+        
+                localStorage.setItem('theme', 'light');
+                if(themeIcon) {
+                    themeIcon.classList.replace('ph-moon', 'ph-sun');
+                    themeIcon.style.color = "#f59e0b";
+                }
+            }
+
+            function applyDark() {
+                htmlEl.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+                if(themeIcon) {
+                    themeIcon.classList.replace('ph-sun', 'ph-moon');
+                    themeIcon.style.color = "var(--text-main)";
+                }
+            }
+        });
+</script>
+<%- include('./partials/footer') %>

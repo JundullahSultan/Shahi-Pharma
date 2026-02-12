@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<%= lang %>" dir="<%= dir %>">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Session Expired | PharmaB2B</title>
+    <title><%= t.errors.sessionExpired %> | <%= t.common.pharmaB2B %></title>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="stylesheet" href="/styles/admin-style.css" />
     <style>
@@ -14,7 +14,7 @@
         margin-bottom: 1.5rem;
         animation: float 3s ease-in-out infinite;
         display: inline-block;
-      }
+}
 
       .redirect-text {
         color: var(--primary);
@@ -30,7 +30,7 @@
         margin-top: 1rem;
         border-radius: 2px;
         overflow: hidden;
-      }
+}
 
       .progress-fill {
         height: 100%;
@@ -42,22 +42,22 @@
       @keyframes float {
         0% {
           transform: translateY(0px);
-        }
+}
         50% {
           transform: translateY(-15px);
-        }
+}
         100% {
           transform: translateY(0px);
-        }
+}
       }
 
       @keyframes shrink {
         from {
           width: 100%;
-        }
+}
         to {
           width: 0%;
-        }
+}
       }
     </style>
   </head>
@@ -66,20 +66,18 @@
       <i class="ph ph-ghost ghost-icon"></i>
 
       <div class="login-header" style="margin-bottom: 1rem">
-        <h1>Access Denied. Admins Only. Obviously.</h1>
+        <h1><%= t.errors.accessDeniedAdmin %></h1>
         <p>
-          You’re seeing this because you’re either not an admin, your session
-          expired, or the system collectively decided “nah.”
+          <%= t.errors.accessDeniedMessage %>
           <br />
-          For your *security*, we logged you out without asking.
+          <%= t.errors.sessionMessage %>
         </p>
       </div>
 
       <div class="redirect-text">
-        Escorting you back to the login page in
-        <span id="timer">5</span> seconds…
+        <%= t.errors.escortingBack %>
+        <span id="timer">5</span>...
         <br />
-        Please enjoy this brief moment of reflection.
       </div>
 
       <div class="progress-bar">
@@ -91,10 +89,51 @@
         class="btn-primary"
         style="display: block; text-decoration: none; margin-top: 2rem"
       >
-        Fine, Take Me to Login
+        <%= t.errors.takeMeLogin %>
       </a>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => 
+{
+            const toggleBtn = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const htmlEl = document.documentElement;
+
+            // 1. Load Saved Theme
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') applyLight();
+      
+            else applyDark();
+
+            // 2. Toggle Logic
+            if(toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    const currentTheme = htmlEl.getAttribute('data-theme');
+                    if (currentTheme === 'light') applyDark();
+                    else applyLight();
+                });
+            }
+
+            function applyLight() {
+                htmlEl.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                if(themeIcon) {
+                    themeIcon.classList.replace('ph-moon', 'ph-sun');
+                    themeIcon.style.color = "#f59e0b";
+                }
+            }
+
+            function applyDark() {
+                htmlEl.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+                if(themeIcon) {
+                    themeIcon.classList.replace('ph-sun', 'ph-moon');
+                    themeIcon.style.color = "var(--text-main)";
+                }
+            }
+        });
+</script>
     <script>
       // Simple Countdown Logic
       let count = 5;
@@ -109,6 +148,5 @@
           window.location.href = '/admin/login'; // The Redirect
         }
       }, 1000);
-    </script>
-  </body>
-</html>
+</script>
+<%- include('./partials/footer') %>

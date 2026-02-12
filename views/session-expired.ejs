@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<%= lang %>" dir="<%= dir %>">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Session Expired | PharmaB2B</title>
+    <title><%= t.errors.sessionExpired %> | <%= t.common.pharmaB2B %></title>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -72,15 +72,14 @@
       <i class="ph ph-ghost ghost-icon"></i>
 
       <div class="login-header" style="margin-bottom: 1rem">
-        <h1>Poof! Session Vanished.</h1>
+        <h1><%= t.errors.sessionVanished %></h1>
         <p>
-          For your security, we automatically logged you out because the session
-          expired or is invalid.
+          <%= t.errors.sessionMessage %>
         </p>
       </div>
 
       <div class="redirect-text">
-        Taking you to login in <span id="timer">5</span>...
+        <%= t.errors.redirecting %> <span id="timer">5</span>...
       </div>
 
       <div class="progress-bar">
@@ -92,7 +91,8 @@
         class="btn-primary"
         style="display: block; text-decoration: none; margin-top: 2rem"
       >
-        Go to Login Now
+    
+        <%= t.errors.goToLogin %>
       </a>
     </div>
 
@@ -110,6 +110,47 @@
           window.location.href = '/admin/login'; // The Redirect
         }
       }, 1000);
-    </script>
-  </body>
-</html>
+</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const htmlEl = document.documentElement;
+
+            // 1. Load Saved Theme
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+       
+            if (savedTheme === 'light') applyLight();
+            else applyDark();
+
+            // 2. Toggle Logic
+            if(toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    const currentTheme = htmlEl.getAttribute('data-theme');
+        
+                    if (currentTheme === 'light') applyDark();
+                    else applyLight();
+                });
+            }
+
+            function applyLight() {
+                htmlEl.setAttribute('data-theme', 'light');
+    
+                localStorage.setItem('theme', 'light');
+                if(themeIcon) {
+                    themeIcon.classList.replace('ph-moon', 'ph-sun');
+                    themeIcon.style.color = "#f59e0b";
+                }
+            }
+
+            function applyDark() {
+                htmlEl.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+                if(themeIcon) {
+                    themeIcon.classList.replace('ph-sun', 'ph-moon');
+                    themeIcon.style.color = "var(--text-main)";
+                }
+            }
+        });
+</script>
+<%- include('./partials/footer') %>

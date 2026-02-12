@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>" dir="<%= dir %>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title><%= title %> | <%= t.common.pharmaAdmin %></title>
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=SUSE:wght@100..900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/styles/admin-style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="ph ph-pill"></i>
+                <span><%= t.common.pharmaAdmin %></span>
+            </div>
+            
+            <nav>
+                <a href="/admin/dashboard" class="<%= page === 'dashboard' ? 'active' : '' %>">
+                    <i class="ph ph-squares-four"></i> <%= t.dashboard %>
+                </a>
+                <a href="/admin/users" class="<%= page === 'users' ? 'active' : '' %>">
+                    <i class="ph ph-users"></i> <%= t.users %>
+                </a>
+                <a href="/admin/medicines" class="<%= page === 'medicines' ? 'active' : '' %>">
+                    <i class="ph ph-flask"></i> <%= t.common.medicines %>
+                </a>
+                <a href="/admin/orders" class="<%= page === 'orders' ? 'active' : '' %>">
+                    <i class="ph ph-package"></i> <%= t.orders %>
+                </a>
+                <a href="/admin/requests" class="<%= page === 'requests' ? 'active' : '' %>">
+                    <i class="ph ph-hand-waving"></i> <%= t.common.requests %>
+                </a>
+            </nav>
+
+            <div class="logout">
+                <a href="/admin/logout"><i class="ph ph-sign-out"></i> <%= t.common.logout %></a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header>
+    
+                <h1><%= title %></h1>
+                
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <button id="themeToggle" class="btn-icon" style="width: 40px; height: 40px; border-radius: 50%; background: var(--surface-light); color: var(--text-main);">
+                        <i class="ph ph-moon" id="themeIcon"></i>
+                    </button>
+
+                    <div class="user-profile">
+                        <span><%= typeof adminName !== 'undefined' ? adminName : t.common.admin %></span>
+                        <div class="avatar">
+                            <%= typeof adminName !== 'undefined' ? adminName[0].toUpperCase() : 'A' %>
+                        </div>
+      
+                    </div>
+                </div>
+            </header>

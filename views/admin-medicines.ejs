@@ -1,71 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Medicines | PharmaAdmin</title>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=SUSE:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles/admin-style.css">
-</head>
-<body>
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="logo"><i class="ph ph-pill"></i><span>PharmaAdmin</span></div>
-            <nav>
-                <a href="/admin/dashboard"><i class="ph ph-squares-four"></i> Dashboard</a>
-                <a href="/admin/users"><i class="ph ph-users"></i> Users</a>
-                <a href="/admin/medicines" class="active"><i class="ph ph-flask"></i> Medicines</a>
-                <a href="/admin/orders"><i class="ph ph-package"></i> Orders</a>
-            </nav>
-            <div class="logout"><a href="/admin/logout"><i class="ph ph-sign-out"></i> Logout</a></div>
-        </aside>
-
-        <main class="main-content">
-            <header>
-                <h1>Medicine Inventory</h1>
-                <div class="user-profile"><span><%= adminName %></span><div class="avatar"><%= adminName[0].toUpperCase() %></div></div>
-            </header>
+<%- include('partials/admin-header', { title: t.adminMedicines.title, page: 'medicines' }) %>
 
             <section class="card mb-2">
                 <div class="card-header">
-                    <h2>Add New Medicine</h2>
+                    <h2><%= t.adminMedicines.addNew %></h2>
                 </div>
                 <form class="grid-form" id="createMedicineForm">
+     
                     <div class="form-group">
-                        <label>Medicine Name</label>
+                        <label><%= t.userRequest.medName %></label>
                         <input type="text" name="name" placeholder="e.g. Aspirin">
                     </div>
+           
                     <div class="form-group">
-                        <label>Company</label>
+                        <label><%= t.adminMedicines.company %></label>
                         <input type="text" name="companyName" placeholder="e.g. Bayer">
                     </div>
+                  
                     <div class="form-group">
-                        <label>Price (؋)</label>
+                        <label><%= t.common.price %> (؋)</label>
                         <input type="number" name="price" step="0.01" placeholder="0.00">
                     </div>
                     <div class="form-group">
-                        <label>Available in Stock</label>
+   
+                        <label><%= t.adminMedicines.availableStock %></label>
                         <input type="number" name="stockQuantity" placeholder="06">
                     </div>
                     <div class="form-group">
-                        <label>Upload Image</label>
+         
+                        <label><%= t.adminMedicines.uploadImage %></label>
                         <input type="file" name="imageURL" accept="image/*"> 
                     </div>
                     <div class="form-group">
-                        <label style="margin-bottom: 10px; display: block;">Visibility</label>
+               
+                        <label style="margin-bottom: 10px; display: block;"><%= t.adminMedicines.visibility %></label>
         
                         <label class="toggle-switch">
                             <input type="checkbox" name="isPublished" checked>
                             <span class="slider"></span>
-                            <span class="toggle-label">Publish immediately?</span>
+      
+                            <span class="toggle-label"><%= t.adminMedicines.publishImmediately %></span>
                         </label>
                     </div>
                     <div id="uploadProgressContainer" style="display: none; margin-bottom: 15px; ">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                            <span style="font-size: 0.85rem; color: var(--text-muted);">Uploading Image...</span>
+                            <span style="font-size: 0.85rem; color: var(--text-muted);"><%= t.adminMedicines.uploading %></span>
                             <span id="progressText" style="font-size: 0.85rem; font-weight: bold;">0%</span>
                         </div>
                         <div style="width: 100%; height: 6px; background: var(--surface-hover); border-radius: 3px; overflow: hidden;">
@@ -73,7 +51,7 @@
                         </div>
                     </div>
                     <div class="form-group full-width">
-                        <button type="submit" class="btn-primary addBtn">Add Medicine</button>
+                        <button type="submit" class="btn-primary addBtn"><%= t.adminMedicines.addBtn %></button>
                     </div>
                 </form>
             </section>
@@ -81,61 +59,73 @@
             <section class="card">
                 <table>
                     <thead>
+   
                         <tr>
-                            <th>Image</th>
-                            <th>Name</th>
-                            <th>Company</th>
-                            <th>Price</th>
-                            <th>Stock</th>
-                            <th>Actions</th>
+                            <th><%= t.common.image %></th>
+                            <th><%= t.common.name %></th>
+                       
+                            <th><%= t.adminMedicines.company %></th>
+                            <th><%= t.common.price %></th>
+                            <th><%= t.common.stock %></th>
+                            <th><%= t.common.actions %></th>
+           
                         </tr>
                     </thead>
                     <tbody>
                         <% medicines.forEach(med => { %>
+                   
                         <tr id="row-<%= med._id %>">
-                            <td><img src="<%= med.imageURL %>" alt="Medicine" class="table-thumb"></td>
+                            <td><img src="<%= med.imageURL %>" alt="<%= t.common.image %>" class="table-thumb"></td>
                             <td><strong><%= med.name %></strong></td>
                             <td><%= med.companyName %></td>
                             <td>$<%= med.price.toFixed(2) %></td>
                             <td>
                                 <% if(med.stockQuantity >= 1) { %>
-                                    <span class="text-success"><%= med.stockQuantity %> in stock</span>
+    
+                                    <span class="text-success"><%= med.stockQuantity %> <%= t.adminMedicines.inStock %></span>
                                 <% } else { %>
-                                    <span class="text-danger">Out of stock</span>
+                           
+                                    <span class="text-danger"><%= t.adminMedicines.outOfStock %></span>
                                 <% } %>
                             </td>
+                          
                             <td>
                                 <div class="actions">
                                     <button class="btn-icon edit-btn" 
-                                            title="Edit"
+                          
+                                            title="<%= t.common.edit %>"
                                             data-id="<%= med._id %>"
+                                    
                                             data-name="<%= med.name %>"
                                             data-company="<%= med.companyName %>"
+                                            
                                             data-price="<%= med.price %>"
                                             data-stock="<%= med.stockQuantity %>">
                                         <i class="ph ph-pencil-simple"></i>
+          
                                     </button>
                                     
                                     <button class="btn-icon delete-btn" 
-                                            title="Delete" 
+                                            title="<%= t.common.delete %>" 
                                             data-id="<%= med._id %>">
+        
                                         <i class="ph ph-trash"></i>
                                     </button>
+                              
                                 </div>
                             </td>
                         </tr>
                         <% }) %>
+                    
                     </tbody>
                 </table>
             </section>
         </main>
     </div>
-    <!-- Extra windowses -->
-
     <dialog id="editModal" class="custom-modal">
         <div class="modal-content" style="text-align: left; max-width: 500px;">
             <div class="card-header">
-                <h2>Edit Medicine</h2>
+                <h2><%= t.adminMedicines.editModalTitle %></h2>
                 <button id="closeEditBtn" class="btn-text"><i class="ph ph-x"></i></button>
             </div>
             
@@ -143,30 +133,35 @@
                 <input type="hidden" name="id" id="editId">
                 
                 <div class="form-group">
-                    <label>Name</label>
+                    <label><%= t.common.name %></label>
                     <input type="text" name="name" id="editName" required>
+   
                 </div>
                 <div class="form-group">
-                    <label>Company</label>
+                    <label><%= t.adminMedicines.company %></label>
                     <input type="text" name="companyName" id="editCompany" required>
                 </div>
+          
                 <div class="grid-form" style="margin:0; padding:0;">
                     <div class="form-group">
-                        <label>Price</label>
+                        <label><%= t.common.price %></label>
                         <input type="number" name="price" id="editPrice" step="0.01" required>
+                 
                     </div>
                     <div class="form-group">
-                        <label>Stock</label>
+                        <label><%= t.common.stock %></label>
                         <input type="number" name="stockQuantity" id="editStock" required>
                     </div>
+    
                 </div>
                 
                 <div class="form-group">
-                    <label>New Image (Optional)</label>
+                    <label><%= t.adminMedicines.newImageOptional %></label>
                     <input type="file" name="imageURL" accept="image/*">
+          
                 </div>
 
-                <button type="submit" class="btn-primary">Save Changes</button>
+                <button type="submit" class="btn-primary"><%= t.adminMedicines.saveChanges %></button>
             </form>
         </div>
     </dialog>
@@ -174,38 +169,41 @@
     <dialog id="deleteModal" class="custom-modal">
         <div class="modal-content">
             <div class="modal-icon danger"><i class="ph ph-warning-circle"></i></div>
-            <h3>Delete Medicine?</h3>
-            <p>This action cannot be undone.</p>
+            <h3><%= t.adminMedicines.deleteModalTitle %></h3>
+       
+            <p><%= t.adminMedicines.deleteWarning %></p>
             <div class="modal-actions">
-                <button id="cancelDeleteBtn" class="btn-text">Cancel</button>
-                <button id="confirmDeleteBtn" class="btn-danger">Yes, Delete</button>
+                <button id="cancelDeleteBtn" class="btn-text"><%= t.common.cancel %></button>
+                <button id="confirmDeleteBtn" class="btn-danger"><%= t.common.yesDelete %></button>
             </div>
         </div>
     </dialog>
     <nav class="mobile-bottom-nav">
     <a href="/admin/dashboard" class="nav-item">
+      
         <i class="ph ph-squares-four"></i>
-        <span>Home</span>
+        <span><%= t.home %></span>
     </a>
     
     <a href="/admin/users" class="nav-item">
         <i class="ph ph-users"></i>
-        <span>Users</span>
+        <span><%= t.users %></span>
     </a>
 
     <a href="/admin/medicines" class="nav-item">
         <div class="fab"><i class="ph ph-plus"></i></div>
-        <span>Meds</span>
+        <span><%= t.meds %></span>
     </a>
 
     <a href="/admin/orders" class="nav-item">
         <i class="ph ph-package"></i>
-        <span>Orders</span>
+       
+        <span><%= t.orders %></span>
     </a>
 
     <a href="/admin/logout" class="nav-item">
         <i class="ph ph-sign-out"></i>
-        <span>Exit</span>
+        <span><%= t.exit %></span>
     </a>
 </nav>
 
@@ -218,8 +216,49 @@
         }
     });
 </script>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const htmlEl = document.documentElement;
+
+            // 1. Load Saved Theme
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+           
+            if (savedTheme === 'light') applyLight();
+            else applyDark();
+
+            // 2. Toggle Logic
+            if(toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    const currentTheme = htmlEl.getAttribute('data-theme');
+            
+                    if (currentTheme === 'light') applyDark();
+                    else applyLight();
+                });
+            }
+
+            function applyLight() {
+                htmlEl.setAttribute('data-theme', 'light');
+        
+                localStorage.setItem('theme', 'light');
+                if(themeIcon) {
+                    themeIcon.classList.replace('ph-moon', 'ph-sun');
+                    themeIcon.style.color = "#f59e0b";
+                }
+            }
+
+            function applyDark() {
+                htmlEl.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+                if(themeIcon) {
+                    themeIcon.classList.replace('ph-sun', 'ph-moon');
+                    themeIcon.style.color = "var(--text-main)";
+                }
+            }
+        });
+</script>
 
     <script src="/js/distroyGoBack.js"></script>
     <script src="/js/admin-medicine.js"></script>
-</body>
-</html>
+<%- include('./partials/footer') %>

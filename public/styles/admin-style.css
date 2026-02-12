@@ -1,3 +1,19 @@
+@font-face {
+  font-family: 'PashtoFont';
+  /* CHANGE 'pashto.ttf' to your actual filename */
+  src: url('../fonts/pashto.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'IranSansX';
+  /* CHANGE 'pashto.ttf' to your actual filename */
+  src: url('../fonts/IRANSansX-Medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   /* Core Palette - Preserved but refined */
   --bg-dark: #0f172a;
@@ -22,17 +38,102 @@
   --ease-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+
+  /* Define the specific fonts */
+  --font-en: 'SUSE', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-ps: 'PashtoFont', sans-serif;
+  --font-fa: 'IranSansX', sans-serif;
+
+  /* Default font (English) */
+  --main-font: var(--font-en);
+}
+
+/* Switch font variable based on the HTML 'lang' attribute */
+html[lang='ps'] {
+  --main-font: var(--font-ps);
+}
+
+html[lang='ps'] body {
+  font-size: 25px !important;
+}
+
+html[lang='fa'] {
+  --main-font: var(--font-fa);
+}
+
+/* =========================================
+   LIGHT THEME OVERRIDES
+   ========================================= */
+[data-theme='light'] {
+  /* 1. Backgrounds - Override the dark gradient */
+  --bg-dark: #f0f4f8;
+
+  /* 2. Surfaces - clean white cards instead of glass */
+  --surface-dark: #ffffff;
+  --surface-light: #e2e8f0;
+
+  /* 3. Text - dark for readability */
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+
+  /* 4. Borders - slightly darker for contrast */
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --glass-highlight: rgba(255, 255, 255, 0.5);
+
+  /* 5. Shadows - softer for light mode */
+  --shadow-glass:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Force body background change in Light Mode */
+[data-theme='light'] body {
+  background: var(--bg-dark); /* Removes the dark linear-gradient */
+}
+
+[data-theme='light'] .search-bar:focus-within {
+  background-color: var(--surface-dark);
+}
+
+/* Make inputs visible on white background */
+[data-theme='light'] input,
+[data-theme='light'] textarea,
+[data-theme='light'] select {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Sidebar needs to be solid white, not glass, in light mode */
+[data-theme='light'] .sidebar {
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+}
+
+[data-theme='light'] .sidebar a:hover {
+  background: #f1f5f9;
+  color: var(--primary);
+}
+
+/* Card adjustments */
+[data-theme='light'] .card {
+  background: #ffffff;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+/* Table rows need contrast */
+[data-theme='light'] tbody tr {
+  background: #f8fafc;
+}
+[data-theme='light'] tbody tr:hover {
+  background: #f1f5f9;
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family:
-    'SUSE',
-    -apple-system,
-    BlinkMacSystemFont,
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   scrollbar-width: thin;
   scrollbar-color: var(--primary) transparent;
@@ -67,6 +168,27 @@ body {
   overflow: hidden;
   position: relative;
   line-height: 1;
+  font-family: var(--main-font);
+}
+
+/* FIX: Make the Logo visible in Light Mode */
+[data-theme='light'] .logo {
+  color: var(--primary); /* Changes logo from White to Purple */
+  text-shadow: none; /* Removes the glow for cleaner look */
+}
+
+/* FIX: Make the Active Link visible in Light Mode */
+[data-theme='light'] .sidebar a.active {
+  color: var(--primary); /* Changes text from White to Purple */
+  background: rgba(99, 102, 241, 0.1); /* Softer background */
+  border-color: var(--primary);
+  box-shadow: none;
+}
+
+/* OPTIONAL: Add a shadow to the sidebar so it stands out from the body */
+[data-theme='light'] .sidebar {
+  box-shadow: 5px 0 25px rgba(0, 0, 0, 0.05);
+  z-index: 50;
 }
 
 @keyframes bg-shift {
@@ -207,7 +329,7 @@ header {
   align-items: center;
   margin-bottom: 2.5rem;
   padding: 1.25rem 1.5rem;
-  background: var(--surface-light);
+  background: var(--surface-dark);
   border-radius: 20px;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -350,7 +472,7 @@ header {
 .stat-card p {
   font-size: 1.8rem;
   font-weight: 700;
-  background: linear-gradient(to right, #fff, #cbd5e1);
+  background: linear-gradient(to right, var(--text-main), var(--text-muted));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -422,10 +544,12 @@ table {
   border-spacing: 0 8px; /* Floating rows */
   margin-top: 0.5rem;
   background: transparent;
+  font-size: inherit;
 }
 
 thead tr {
   background: transparent;
+  font-size: inherit;
 }
 
 th {
@@ -434,7 +558,7 @@ th {
   color: var(--text-muted);
   font-weight: 600;
   text-transform: uppercase;
-  font-size: 0.75rem;
+  font-size: inherit;
   letter-spacing: 1px;
   border-bottom: none;
   background: transparent !important;
@@ -444,6 +568,7 @@ tbody tr {
   background: rgba(30, 41, 59, 0.3);
   transition: all 0.2s;
   backdrop-filter: blur(10px);
+  font-size: inherit;
 }
 
 tbody tr:hover {
@@ -456,6 +581,7 @@ td {
   padding: 1.25rem 1.5rem;
   border-bottom: none;
   font-size: 0.95rem;
+  font-size: inherit;
 }
 
 td:first-child {
@@ -540,6 +666,8 @@ textarea {
   outline: none;
   transition: all 0.3s var(--ease-elastic);
   font-size: 0.95rem;
+  unicode-bidi: plaintext;
+  font-family: 'SUSE';
 }
 
 input:hover {
@@ -567,7 +695,7 @@ input:focus {
   align-items: center;
   gap: 10px;
   padding: 14px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(var(--surface-dark), 0.2);
   border: 1px solid var(--glass-border);
   border-radius: 12px;
   cursor: pointer;
@@ -703,7 +831,7 @@ input:focus {
 .card-header h2 {
   font-size: 1.25rem;
   font-weight: 700;
-  background: linear-gradient(to right, #fff, #94a3b8);
+  background: linear-gradient(to right, var(--text-main), var(--text-muted));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -711,7 +839,7 @@ input:focus {
 .btn-text {
   background: rgba(99, 102, 241, 0.1);
   border: 1px solid rgba(99, 102, 241, 0.2);
-  color: #a5b4fc;
+  color: var(--text-muted);
   cursor: pointer;
   padding: 8px 16px;
   border-radius: 8px;
@@ -722,7 +850,7 @@ input:focus {
 
 .btn-text:hover {
   background: var(--primary);
-  color: white;
+  color: var(--text-main);
   border-color: var(--primary);
   box-shadow: 0 0 15px var(--primary-glow);
 }
@@ -736,7 +864,7 @@ input:focus {
 }
 
 .search-bar {
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(var(--surface-dark), 0.4);
   backdrop-filter: blur(10px);
   border: 1px solid var(--glass-border);
   border-radius: 14px;
@@ -748,6 +876,7 @@ input:focus {
   color: var(--text-muted);
   transition: all 0.3s var(--ease-elastic);
   box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+  width: 300px;
 }
 
 .search-bar:focus-within {
@@ -756,7 +885,6 @@ input:focus {
     0 0 0 2px rgba(99, 102, 241, 0.15),
     0 5px 20px rgba(0, 0, 0, 0.2);
   background: rgba(15, 23, 42, 0.6);
-  width: 350px;
 }
 
 .search-bar input {
@@ -1242,6 +1370,10 @@ input:focus {
     grid-template-columns: 2fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: 1.5rem;
+  }
+
+  .customer-card-header h2 {
+    display: none;
   }
 
   .content-split .recent-orders {

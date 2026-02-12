@@ -1,0 +1,146 @@
+<%- include('partials/admin-header', {title: t.adminRequests.title, page: 'requests'}) %>
+
+<section class="card">
+    <div class="card-header customer-card-header">
+        <h2><%= t.adminRequests.title %></h2>
+        <div class="toolbar">
+            <div class="search-bar">
+                <i class="ph ph-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="<%= t.adminRequests.searchPlaceholder %>">
+            </div>
+        </div>
+  
+    </div>
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th><%= t.adminRequests.user %></th>
+                    <th><%= t.adminRequests.medicine %></th>
+                 
+                    <th><%= t.adminRequests.qty %></th>
+                    <th><%= t.common.date %></th>
+                    <th><%= t.common.status %></th>
+                    <th><%= t.common.actions %></th>
+                </tr>
+            </thead>
+         
+            <tbody>
+                <% if (requests.length > 0) { %>
+                    <% requests.forEach(req => { %>
+                        <tr id="row-<%= req._id %>">
+                        
+                            <td>
+                                <div class="user-info">
+                                    <div class="avatar-sm"><%= req.user ? req.user.name[0] : '?' %></div>
+                                    <span><%= req.user ? req.user.name : t.adminOrders.unknownUser %></span>
+                                </div>
+                            </td>
+                            <td>
+         
+                                <strong><%= req.medicineName %></strong>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);"><%= req.companyName %></div>
+                            </td>
+         
+                            <td><%= req.quantity %></td>
+                            <td><%= new Date(req.createdAt).toLocaleDateString() %></td>
+                            <td>
+                    
+                                <span class="badge <%= req.status.toLowerCase() %>"><%= req.status %></span>
+                            </td>
+                            <td>
+                          
+                                <div class="actions">
+                                    <button class="btn-icon" onclick="openDetails('<%= JSON.stringify(req) %>')">
+                                        <i class="ph ph-eye"></i>
+           
+                                    </button>
+
+                                    <% if (req.status === 'pending') { %>
+                                 
+                                        <button class="btn-icon approve" onclick="updateStatus('<%= req._id %>', 'approved')">
+                                            <i class="ph ph-check"></i>
+                                        </button>
+ 
+                                        <button class="btn-icon cancel" onclick="updateStatus('<%= req._id %>', 'rejected')">
+                                            <i class="ph ph-x"></i>
+         
+                                        </button>
+                                    <% } %>
+                               
+                                </div>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+     
+                    <tr><td colspan="6" style="text-align: center; padding: 2rem;"><%= t.userRequest.noRequests %></td></tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<dialog id="detailsModal" class="custom-modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="card-header">
+            <h2 id="modalTitle"><%= t.adminRequests.modalTitle %></h2>
+            <button onclick="document.getElementById('detailsModal').close()" class="btn-text"><i class="ph ph-x"></i></button>
+       
+        </div>
+        <div id="modalBody" style="display: grid; gap: 1rem;">
+            </div>
+    </div>
+</dialog>
+
+<script>
+    // 1. Update Status Logic
+    async function updateStatus(id, status) {
+        // Simple client-side check for t message based on status
+        let msg = status === 'approved' ? 
+            "<%= t.adminRequests.confirmApprove %>" : 
+            "<%= t.adminRequests.confirmReject %>";
+            
+        if(!confirm(msg)) return;
+
+        try {
+            const res = await fetch(`/admin/requests/${id}/status`, {
+                method: 'PUT',
+       
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status })
+            });
+
+            if (res.ok) {
+                location.reload(); // Refresh to see changes
+            } else {
+       
+                alert('<%= t.adminRequests.errorUpdate %>');
+            }
+        } catch (err) {
+            alert('<%= t.adminRequests.networkError %>');
+        }
+    }
+
+    // 2. Open Modal Logic
+    function openDetails(reqString) {
+        const req = JSON.parse(reqString);
+        const modal = document.getElementById('detailsModal');
+     
+        const body = document.getElementById('modalBody');
+
+        body.innerHTML = `
+            <div class="detail-row"><strong><%= t.adminRequests.medicine %>:</strong> ${req.medicineName}</div>
+            <div class="detail-row"><strong><%= t.adminMedicines.company %>:</strong> ${req.companyName}</div>
+            <div class="detail-row"><strong><%= t.adminRequests.shapeDose %>:</strong> ${req.shapeAndDose}</div>
+            <div class="detail-row"><strong><%= t.userRequest.tradeName %>:</strong> ${req.tradeName || '-'}</div>
+            <div class="detail-row"><strong><%= t.userRequest.scientificName %>:</strong> ${req.scientificName || '-'}</div>
+            <div class="detail-row"><strong><%= t.userRequest.description %>:</strong> <p style="margin-top:5px; background:rgba(0,0,0,0.2); padding:10px; border-radius:8px;">${req.description || '<%= t.adminRequests.noDescription %>'}</p></div>
+        `;
+        
+        modal.showModal();
+    }
+</script>
+
+<%- include('partials/admin-footer', { page: 'requests' }) %>

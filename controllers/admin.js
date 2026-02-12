@@ -4,6 +4,7 @@ const Order = require('../models/Orders.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const upload = require('../config/cloudinary');
+const Request = require('../models/Request');
 
 // Upload image middleware
 exports.uploadImage = upload.single('imageURL');
@@ -278,5 +279,37 @@ exports.updateOrderStatus = async (req, res) => {
   } catch (error) {
     console.error('Order Update Error:', error);
     res.status(500).json({ message: 'Server error updating order' });
+  }
+};
+
+// 1. GET ALL REQUESTS
+exports.getRequests = async (req, res) => {
+  try {
+    const requests = await Request.find()
+      .populate('user', 'name') // Get the user's name
+      .sort({ createdAt: -1 }); // Newest first
+
+    res.render('admin-requests', {
+      requests,
+      title: 'Manage Requests',
+      page: 'requests', // For highlighting sidebar
+      adminName: req.user.name,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+};
+
+// 2. UPDATE REQUEST STATUS (Approve/Reject)
+exports.updateRequestStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body; // 'approved' or 'rejected'
+
+    await Request.findByIdAndUpdate(id, { status });
+    res.json({ message: `Request ${status} successfully` });
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating status' });
   }
 };

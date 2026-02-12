@@ -1,75 +1,98 @@
-<%- include('../partials/user-header', { title: 'My Orders', page: 'orders' }) %>
+<%- include('../partials/user-header', { title: t.userOrders.myOrders, page: 'orders' }) %>
 
             <section class="card">
                 <table>
                     <thead>
                         <tr>
+                  
                             <th>Order ID</th>
-                            <th>Medicine</th> <th>Date</th>
-                            <th>Qty</th>
-                            <th>Total</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th><%= t.adminRequests.medicine %></th> 
+                            <th><%= t.common.date %></th>
+                            <th><%= t.adminRequests.qty %></th>
+                            <th><%= t.common.total %></th>
+    
+                            <th><%= t.common.status %></th>
+                            <th><%= t.common.actions %></th>
                         </tr>
                     </thead>
+    
                     <tbody>
                         <% if (orders && orders.length > 0) { %>
                             <% orders.forEach(order => { %>
+                    
                             <tr>
                                 <td>
                                     <span class="text-muted">#<%= order._id.toString().slice(-6).toUpperCase() %></span>
+                     
                                 </td>
 
                                 <td>
                                     <% if (order.medicineId) { %>
+                 
                                         <div class="med-info">
                                             <img src="<%= order.medicineId.imageURL %>" alt="" class="med-thumb">
-                                            <span><%= order.medicineId ? order.medicineId.name : 'Item Deleted' %></span>
+                           
+                                            <span><%= order.medicineId ? order.medicineId.name : t.userOrders.itemDeleted %></span>
                                         </div>
                                     <% } else { %>
-                                        <span class="text-danger">Item Unavailable</span>
+                
+                                        <span class="text-danger"><%= t.userOrders.itemUnavailable %></span>
                                     <% } %>
                                 </td>
 
+    
                                 <td>
                                     <%= new Date(order.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+                         
                                 </td>
 
                                 <td><%= order.quantity %></td>
 
                                 <td>$<%= order.totalPrice.toFixed(2) %></td>
 
+                         
                                 <td>
                                     <span class="badge <%= order.status.toLowerCase() %>">
                                         <%= order.status %>
+           
                                     </span>
                                 </td>
 
                                 <td>
+           
                                     <% if(order.status === 'Pending') { %>
-                                        <form action="/user/order/cancel" method="POST" onsubmit="return confirm('Cancel this order?');">
+                                        <form action="/user/order/cancel" method="POST" onsubmit="return confirm('<%= t.userOrders.confirmCancel %>');">
+                        
                                             <input type="hidden" name="orderId" value="<%= order._id %>">
-                                            <button type="submit" class="btn-icon cancel" title="Cancel Order">
+                                            <button type="submit" class="btn-icon cancel" title="<%= t.userOrders.cancelOrder %>">
+                          
                                                 <i class="ph ph-x"></i>
                                             </button>
+                                
                                         </form>
                                     <% } else { %>
                                         <span class="text-muted">-</span>
+           
                                     <% } %>
                                 </td>
                             </tr>
+             
                             <% }) %>
                         <% } else { %>
                             <tr>
+                           
                                 <td colspan="7">
                                     <div class="empty-state">
                                         <i class="ph ph-shopping-cart"></i>
-                                        <p>No orders found yet.</p>
-                                        <a href="/user/medicines" class="btn-text">Go to Marketplace</a>
+               
+                                        <p><%= t.userOrders.emptyState %></p>
+                                        <a href="/user/dashboard" class="btn-text"><%= t.userOrders.goToMarket %></a>
+                            
                                     </div>
                                 </td>
                             </tr>
                         <% } %>
+      
                     </tbody>
                 </table>
             </section>
@@ -85,5 +108,4 @@
         }
     });
 </script>
-</body>
-</html>
+<%- include('../partials/footer') %>

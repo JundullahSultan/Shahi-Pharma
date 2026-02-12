@@ -1,26 +1,28 @@
-<%- include('../partials/user-header', { title: 'New Request', page: 'request' }) %>
+<%- include('../partials/user-header', { title: t.userRequest.pageTitle, page: 'request' }) %>
 
         <section class="card">
           <div class="card-header">
-            <h2>Request Details</h2>
+            <h2><%= t.userRequest.detailsTitle %></h2>
             <p style="color: var(--text-muted); font-size: 0.9rem">
-              Request a medicine that is not currently in our stock.
+              <%= t.userRequest.subtitle %>
             </p>
           </div>
 
           <form id="requestForm" class="grid-form">
             <div class="form-group">
-              <label>Medicine Name *</label>
+              <label><%= t.userRequest.medName %> *</label>
               <input
                 type="text"
                 name="medicineName"
+   
                 placeholder="e.g. Panadol Extra"
                 required
               />
             </div>
 
             <div class="form-group">
-              <label>Company Name *</label>
+              <label><%= t.userRequest.companyName %> *</label>
+              
               <input
                 type="text"
                 name="companyName"
@@ -29,20 +31,23 @@
               />
             </div>
 
+         
             <div class="form-group">
-              <label>Quantity *</label>
+              <label><%= t.common.quantity %> *</label>
               <input
                 type="number"
                 name="quantity"
                 placeholder="e.g. 50"
                 required
-              />
+  
+             />
             </div>
 
             <div class="form-group">
-              <label>Shape & Dose *</label>
+              <label><%= t.userRequest.shapeDose %> *</label>
               <input
                 type="text"
+                
                 name="shapeAndDose"
                 placeholder="e.g. Tablet 500mg"
                 required
@@ -50,31 +55,35 @@
             </div>
 
             <div class="form-group">
-              <label>Trade Name</label>
+              <label><%= t.userRequest.tradeName %></label>
               <input type="text" name="tradeName" placeholder="Brand name" />
+          
             </div>
 
             <div class="form-group">
-              <label>Scientific Name</label>
+              <label><%= t.userRequest.scientificName %></label>
               <input
                 type="text"
                 name="scientificName"
                 placeholder="Generic name"
+       
               />
             </div>
 
             <div class="form-group full-width">
-              <label>Description / Notes</label>
+              <label><%= t.userRequest.description %></label>
               <textarea
                 name="description"
-                placeholder="Any specific details..."
-                
+                placeholder=""
+   
+              
               ></textarea>
             </div>
 
             <div class="form-group full-width">
               <button type="submit" class="btn-primary btn-submit">
-                <i class="ph ph-paper-plane-right"></i> Submit Request
+                <i class="ph ph-paper-plane-right"></i> <%= t.userRequest.submitBtn %>
+          
               </button>
             </div>
           </form>
@@ -94,7 +103,6 @@
           link.classList.add('active');
         }
       });
-
       // Form Submission Logic
       document
         .getElementById('requestForm')
@@ -104,7 +112,8 @@
           const originalHTML = btn.innerHTML;
 
           // Loading State
-          btn.innerHTML = `<i class="ph ph-spinner ph-spin"></i> Sending...`;
+          btn.innerHTML = `<i class="ph ph-spinner ph-spin"></i> <%= t.userRequest.sending %>`;
+       
           btn.style.opacity = '0.7';
           btn.disabled = true;
 
@@ -114,13 +123,15 @@
             const res = await fetch('/user/request', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
+        
               body: JSON.stringify(formData),
             });
 
             if (res.ok) {
               btn.style.backgroundColor = 'var(--success, #00b894)';
-              btn.innerHTML = `<i class="ph ph-check"></i> Request Sent!`;
+              btn.innerHTML = `<i class="ph ph-check"></i> <%= t.userRequest.sentSuccess %>`;
               setTimeout(
+                
                 () => (window.location.href = '/user/my-requests'),
                 1000,
               );
@@ -132,12 +143,11 @@
             }
           } catch (err) {
             console.error(err);
-            alert('Network error');
+            alert('<%= t.adminRequests.networkError %>');
             btn.innerHTML = originalHTML;
             btn.disabled = false;
             btn.style.opacity = '1';
           }
         });
     </script>
-  </body>
-</html>
+ <%- include('../partials/footer') %>
