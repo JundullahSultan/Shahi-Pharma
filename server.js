@@ -6,12 +6,41 @@ const userRoutes = require('./routes/user.js');
 const authRoutes = require('./routes/auth.js');
 const connectDB = require('./config/db.js');
 
+const languages = {
+  en: require('./locales/en.json'),
+  fa: require('./locales/fa.json'),
+  ps: require('./locales/ps.json'),
+};
+
 const app = express();
 
 // Allows express to read JSON bodies sent from JavaScript
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.use((req, res, next) => {
+  // Check if user has a language cookie, default to 'en' (English)
+  const langCode = req.cookies.lang || 'en';
+
+  // Get the correct dictionary (if code is invalid, fallback to English)
+  const translation = languages[langCode] || languages['en'];
+
+  // Make variables available in ALL EJS files automatically
+  res.locals.lang = langCode; // e.g., 'fa'
+  res.locals.t = translation; // The dictionary object
+  res.locals.dir = translation.direction; // 'ltr' or 'rtl'
+
+  next();
+});
+
+app.get('/lang/:code', (req, res) => {
+  const code = req.params.code;
+  // Save their choice in a cookie for 1 year
+  res.cookie('lang', code, { maxAge: 900000000 });
+  // Reload the page they were currently on
+  res.redirect(req.get('referer') || '/');
+});
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));

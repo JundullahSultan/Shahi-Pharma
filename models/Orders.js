@@ -9,8 +9,8 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Pending', 'Approved', 'Cancelled'],
-      default: 'Pending',
+      enum: ['pending', 'approved', 'cancelled'],
+      default: 'pending',
     },
     medicineId: {
       type: mongoose.Schema.Types.ObjectId,

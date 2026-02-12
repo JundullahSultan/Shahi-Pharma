@@ -13,4 +13,9 @@ router.post('/dashboard', auth.verifyUser, userController.createOrder);
 
 router.get('/orders', auth.verifyUser, userController.getMyOrders);
 
+// Request routes
+router.get('/request', auth.verifyUser, userController.sendRequestPage);
+router.post('/request', auth.verifyUser, userController.createRequest);
+router.get('/my-requests', auth.verifyUser, userController.getMyRequests);
+
 module.exports = router;

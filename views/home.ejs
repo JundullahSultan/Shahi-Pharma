@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<%= lang %>" dir="<%= dir %>">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PharmaB2B | The Future of Pharmacy Supply</title>
+    <title><%- t.meta.title %></title>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -237,8 +237,11 @@
         .hero h1 {
           font-size: 2.5rem;
         }
+
         .landing-nav {
-          padding: 1rem;
+          justify-content: center;
+        }
+        .logo, .nav-link {
           display: none;
         }
       }
@@ -246,62 +249,64 @@
   </head>
   <body>
     <nav class="landing-nav">
-      <div class="nav-logo">
+      <div class="logo">
         <i class="ph ph-pill"></i>
-        <span>PharmaB2B</span>
+        <span><%- t.navbar.brand %></span>
       </div>
-      <div class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#about">About</a>
-        <a href="/login" class="btn-glass" style="padding: 8px 20px">Login</a>
+      
+      <div style="display: flex; align-items: center; gap: 20px;">
+        <div class="lang-switch">
+            <a href="/lang/en" class="<%= lang === 'en' ? 'active' : '' %>">EN</a>
+            <span style="color: rgba(255,255,255,0.3)">|</span>
+            <a href="/lang/fa" class="<%= lang === 'fa' ? 'active' : '' %>">فا</a>
+            <span style="color: rgba(255,255,255,0.3)">|</span>
+            <a href="/lang/ps" class="<%= lang === 'ps' ? 'active' : '' %>">پښ</a>
+        </div>
+
+        <a href="#features" class="nav-link"><%- t.navbar.about %></a>
       </div>
     </nav>
 
     <section class="hero">
       <div class="hero-content">
-        <h1>Supply Your Pharmacy.<br />Simplify Your Business.</h1>
+        <h1><%- t.hero.title %></h1>
         <p>
-          The all-in-one
-          <span class="highlight-text">Shahi Pharma marketplace</span>
-          connecting pharmacies directly to suppliers. Streamline orders, track
-          inventory, and grow your business with Shahi Pharma.
+          <%- t.hero.description %>
         </p>
         <div class="hero-btns">
-          <a href="/admin/login" class="btn-primary-lg">Admin Login </a>
-          <a href="/user/login" class="btn-glass">User Login</a>
+          <a href="/admin/login" class="btn-primary-lg"><%- t.hero.adminLogin %> </a>
+          <a href="/user/login" class="btn-glass"><%- t.hero.userLogin %></a>
         </div>
       </div>
     </section>
 
     <section class="features" id="features">
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon"><i class="ph ph-rocket-launch"></i></div>
-          <h3>Fast Delivery</h3>
-          <p>
-            Order today and get your supplies delivered within 24 hours. We
-            prioritize speed so you never run out of stock.
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon"><i class="ph ph-shield-check"></i></div>
-          <h3>Verified Quality</h3>
-          <p>
-            All medicines are sourced from certified manufacturers. We guarantee
-            100% authentic products for your customers.
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon"><i class="ph ph-chart-line-up"></i></div>
-          <h3>Track Growth</h3>
-          <p>
-            Use our advanced dashboard to track your order history, spending,
-            and inventory levels in real-time.
-          </p>
-        </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="ph ph-rocket-launch"></i>
       </div>
-    </section>
+      <h3><%- t.features.fastDelivery.title %></h3>
+      <p><%- t.features.fastDelivery.description %></p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="ph ph-shield-check"></i>
+      </div>
+      <h3><%- t.features.verifiedQuality.title %></h3>
+      <p><%- t.features.verifiedQuality.description %></p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="ph ph-chart-line-up"></i>
+      </div>
+      <h3><%- t.features.trackGrowth.title %></h3>
+      <p><%- t.features.trackGrowth.description %></p>
+    </div>
+  </div>
+</section>
+
   </body>
 </html>

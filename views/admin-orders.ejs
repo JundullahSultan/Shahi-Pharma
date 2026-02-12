@@ -59,7 +59,7 @@
                         <% if (orders && orders.length > 0) { %>
                             <% orders.forEach(order => { %>
                             <tr>
-                                <td><strong><%= order.medicineId.name %></strong></td>
+                                <td><strong><%= order.medicineId ? order.medicineId.name : 'Deleted Medicine' %></strong></td>
                                 
                                 <td><%= order.user?.name || 'Unknown'%></td>
                                 

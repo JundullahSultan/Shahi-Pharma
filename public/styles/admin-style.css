@@ -90,6 +90,32 @@ a {
   color: inherit;
 }
 
+/* Language Selector Styles */
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px 30px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 22px;
+}
+.lang-switch a {
+  color: #aaa;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: 0.3s;
+}
+.lang-switch a:hover {
+  color: white;
+}
+.lang-switch a.active {
+  color: #6c5ce7; /* Your Primary Purple Color */
+  font-weight: bold;
+}
+
 /* Sidebar - Frosted Glass */
 .sidebar {
   background: var(--surface-dark);
@@ -271,7 +297,7 @@ header {
   animation-delay: 0.3s;
 }
 
-.card:hover {
+/* .card:hover {
   transform: translateY(-6px) scale(1.01);
   background: linear-gradient(
     145deg,
@@ -282,11 +308,11 @@ header {
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
     0 20px 40px -10px rgba(0, 0, 0, 0.6),
-    0 0 20px rgba(99, 102, 241, 0.1); /* Subtle ambient glow */
-}
+    0 0 20px rgba(99, 102, 241, 0.1); 
+} */
 
 /* Shine effect on card hover */
-.card::after {
+/* .card::after {
   content: '';
   position: absolute;
   top: 0;
@@ -305,7 +331,7 @@ header {
 }
 .card:hover::after {
   transform: translateX(100%);
-}
+} */
 
 .stat-card {
   display: flex;
@@ -343,9 +369,9 @@ header {
   transition: all 0.3s var(--ease-elastic);
 }
 
-.card:hover .icon-box {
+/* .card:hover .icon-box {
   transform: scale(1.1) rotate(-5deg);
-}
+} */
 
 .icon-box.blue {
   background: rgba(99, 102, 241, 0.1);
@@ -503,7 +529,8 @@ label {
   text-decoration: underline;
 }
 
-input {
+input,
+textarea {
   width: 100%;
   padding: 14px 16px;
   background: rgba(0, 0, 0, 0.2);
@@ -597,6 +624,30 @@ input:focus {
 .actions {
   display: flex;
   gap: 10px;
+}
+
+.med-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.med-thumb {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: var(--surface-light);
+  border: 1px solid var(--border);
+}
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-muted);
+}
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
 }
 
 .btn-icon {
@@ -784,6 +835,16 @@ input:focus {
   color: #f87171;
   font-weight: 500;
   text-shadow: 0 0 10px rgba(248, 113, 113, 0.3);
+}
+
+.delete-btn {
+  background-color: var(--danger);
+  color: #fff;
+}
+
+.edit-btn {
+  background-color: var(--warning);
+  color: #fff;
 }
 
 /* Filter Tabs */
@@ -1149,10 +1210,6 @@ input:focus {
     min-height: 100% !important;
     overflow-y: auto !important; /* Let the browser handle scrolling naturally */
     overflow-x: hidden;
-  }
-
-  body {
-    /* font-size: 12px; */
   }
 
   /* HIDE the Sidebar completely */

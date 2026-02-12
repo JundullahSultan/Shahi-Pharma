@@ -1,0 +1,22 @@
+<nav class="mobile-bottom-nav">
+        <a href="/user/dashboard" class="nav-item <%= page === 'dashboard' ? 'active' : '' %>">
+            <i class="ph ph-squares-four"></i>
+            <span>Home</span>
+        </a>
+        <a href="/user/request" class="nav-item <%= page === 'request' ? 'active' : '' %>">
+             <div class=""><i class="ph ph-plus"></i></div>
+            <span>New</span>
+        </a>
+        <a href="/user/my-requests" class="nav-item <%= page === 'my-requests' ? 'active' : '' %>">
+            <i class="ph ph-notebook"></i>
+            <span>Requests</span>
+        </a>
+        <a href="/user/orders" class="nav-item <%= page === 'orders' ? 'active' : '' %>">
+            <i class="ph ph-package"></i>
+            <span>Orders</span>
+        </a>
+        <a href="/user/logout" class="nav-item">
+            <i class="ph ph-sign-out"></i>
+            <span>Exit</span>
+        </a>
+    </nav>

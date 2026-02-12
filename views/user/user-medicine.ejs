@@ -1,31 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Marketplace | PharmaB2B</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=SUSE:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles/admin-style.css">
-</head>
-<body>
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="logo"><i class="ph ph-pill"></i><span>PharmaStore</span></div>
-            <nav>
-                <a href="/user/dashboard" class="active"><i class="ph ph-storefront"></i> Marketplace</a>
-                <a href="/user/orders"><i class="ph ph-package"></i> My Orders</a>
-            </nav>
-            <div class="logout"><a href="/user/logout"><i class="ph ph-sign-out"></i> Logout</a></div>
-        </aside>
-
-        <main class="main-content">
-            <header>
-                <h1>Available Medicines</h1>
-                <div class="user-profile"><span><%= user.name %></span><div class="avatar">U</div></div>
-            </header>
+<%- include('../partials/user-header', { title: 'Dashboard', page: 'dashboard' }) %>
 
             <div class="medicine-grid">
                 <% medicines.forEach(med => { %>
@@ -62,22 +35,7 @@
                 <% }) %>
             </div>
         </main>
-<nav class="mobile-bottom-nav">
-    <a href="/user/dashboard" class="nav-item">
-        <i class="ph ph-squares-four"></i>
-        <span>Home</span>
-    </a>
-
-    <a href="/user/orders" class="nav-item">
-        <i class="ph ph-package"></i>
-        <span>Orders</span>
-    </a>
-
-    <a href="/user/logout" class="nav-item">
-        <i class="ph ph-sign-out"></i>
-        <span>Exit</span>
-    </a>
-</nav>
+<%- include('../partials/mobile-nav', { page: 'dashboard' }) %>
 <script>
     // This highlights the icon that matches the current page URL
     const currentPath = window.location.pathname;

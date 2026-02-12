@@ -1,0 +1,143 @@
+<%- include('../partials/user-header', { title: 'New Request', page: 'request' }) %>
+
+        <section class="card">
+          <div class="card-header">
+            <h2>Request Details</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem">
+              Request a medicine that is not currently in our stock.
+            </p>
+          </div>
+
+          <form id="requestForm" class="grid-form">
+            <div class="form-group">
+              <label>Medicine Name *</label>
+              <input
+                type="text"
+                name="medicineName"
+                placeholder="e.g. Panadol Extra"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Company Name *</label>
+              <input
+                type="text"
+                name="companyName"
+                placeholder="e.g. GSK"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Quantity *</label>
+              <input
+                type="number"
+                name="quantity"
+                placeholder="e.g. 50"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Shape & Dose *</label>
+              <input
+                type="text"
+                name="shapeAndDose"
+                placeholder="e.g. Tablet 500mg"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Trade Name</label>
+              <input type="text" name="tradeName" placeholder="Brand name" />
+            </div>
+
+            <div class="form-group">
+              <label>Scientific Name</label>
+              <input
+                type="text"
+                name="scientificName"
+                placeholder="Generic name"
+              />
+            </div>
+
+            <div class="form-group full-width">
+              <label>Description / Notes</label>
+              <textarea
+                name="description"
+                placeholder="Any specific details..."
+                
+              ></textarea>
+            </div>
+
+            <div class="form-group full-width">
+              <button type="submit" class="btn-primary btn-submit">
+                <i class="ph ph-paper-plane-right"></i> Submit Request
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <div class="mobile-spacer" style="height: 100px"></div>
+      </main>
+    </div>
+
+    <%- include('../partials/mobile-nav', { page: 'requset' }) %>
+
+    <script>
+      // Highlight active mobile nav link
+      const currentPath = window.location.pathname;
+      document.querySelectorAll('.mobile-bottom-nav a').forEach((link) => {
+        if (link.getAttribute('href') === currentPath) {
+          link.classList.add('active');
+        }
+      });
+
+      // Form Submission Logic
+      document
+        .getElementById('requestForm')
+        .addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const btn = document.querySelector('.btn-submit');
+          const originalHTML = btn.innerHTML;
+
+          // Loading State
+          btn.innerHTML = `<i class="ph ph-spinner ph-spin"></i> Sending...`;
+          btn.style.opacity = '0.7';
+          btn.disabled = true;
+
+          const formData = Object.fromEntries(new FormData(e.target));
+
+          try {
+            const res = await fetch('/user/request', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(formData),
+            });
+
+            if (res.ok) {
+              btn.style.backgroundColor = 'var(--success, #00b894)';
+              btn.innerHTML = `<i class="ph ph-check"></i> Request Sent!`;
+              setTimeout(
+                () => (window.location.href = '/user/my-requests'),
+                1000,
+              );
+            } else {
+              alert('Error sending request');
+              btn.innerHTML = originalHTML;
+              btn.disabled = false;
+              btn.style.opacity = '1';
+            }
+          } catch (err) {
+            console.error(err);
+            alert('Network error');
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
+            btn.style.opacity = '1';
+          }
+        });
+    </script>
+  </body>
+</html>

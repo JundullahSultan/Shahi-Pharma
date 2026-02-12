@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title><%= title %> | PharmaB2B</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=SUSE:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/admin-style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="ph ph-pill"></i>
+                <span>PharmaB2B</span>
+            </div>
+            <nav>
+                <a href="/user/dashboard" class="<%= page === 'dashboard' ? 'active' : '' %>">
+                    <i class="ph ph-squares-four"></i> Dashboard
+                </a>
+                <a href="/user/request" class="<%= page === 'request' ? 'active' : '' %>">
+                    <i class="ph ph-plus-circle"></i> New Request
+                </a>
+                <a href="/user/my-requests" class="<%= page === 'my-requests' ? 'active' : '' %>">
+                    <i class="ph ph-notebook"></i> My Requests
+                </a>
+                <a href="/user/orders" class="<%= page === 'orders' ? 'active' : '' %>">
+                    <i class="ph ph-package"></i> My Orders
+                </a>
+            </nav>
+            <div class="logout">
+                <a href="/user/logout"><i class="ph ph-sign-out"></i> Logout</a>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1><%= title %></h1>
+                <div class="user-profile">
+                    <span><%= user.name %></span>
+                    <div class="avatar"><%= user.name[0].toUpperCase() %></div>
+                </div>
+            </header>

@@ -1,0 +1,40 @@
+{
+  "direction": "ltr",
+  "home": "Home",
+  "users": "Users",
+  "meds": "Meds",
+  "orders": "Orders",
+  "exit": "Exit",
+  "request": "New Request",
+  "my_requests": "My Requests",
+  "dashboard": "Dashboard",
+  "welcome": "Welcome",
+  "meta": {
+    "title": "PharmaB2B | The Future of Pharmacy Supply"
+  },
+  "navbar": {
+    "brand": "PharmaB2B",
+    "about": "About"
+  },
+  "hero": {
+    "title": "Powering the Next Generation of Pharmacy Supply",
+    "description": "The all-in-one Shahi Pharma marketplace connecting pharmacies directly to suppliers. Streamline orders, track inventory, and grow your business with Shahi Pharma.",
+    "highlight": "Shahi Pharma marketplace",
+    "adminLogin": "Admin Login",
+    "userLogin": "User Login"
+  },
+  "features": {
+    "fastDelivery": {
+      "title": "Fast Delivery",
+      "description": "Order today and get your supplies delivered within 24 hours. We prioritize speed so you never run out of stock."
+    },
+    "verifiedQuality": {
+      "title": "Verified Quality",
+      "description": "All medicines are sourced from certified manufacturers. We guarantee 100% authentic products for your customers."
+    },
+    "trackGrowth": {
+      "title": "Track Growth",
+      "description": "Use our advanced dashboard to track your order history, spending, and inventory levels in real-time."
+    }
+  }
+}
