@@ -40,7 +40,7 @@
   --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 
   /* Define the specific fonts */
-  --font-en: 'SUSE', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-en: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-ps: 'PashtoFont', sans-serif;
   --font-fa: 'IranSansX', sans-serif;
 
@@ -88,6 +88,7 @@ html[lang='fa'] {
 /* Force body background change in Light Mode */
 [data-theme='light'] body {
   background: var(--bg-dark); /* Removes the dark linear-gradient */
+  color: var(--text-main);
 }
 
 [data-theme='light'] .search-bar:focus-within {
@@ -150,7 +151,7 @@ html[lang='fa'] {
 ::-webkit-scrollbar-thumb {
   background: var(--surface-light);
   border-radius: 3px;
-  backdrop-filter: blur(4px);
+  /* backdrop-filter: blur(4px); */
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary);
@@ -169,6 +170,11 @@ body {
   position: relative;
   line-height: 1;
   font-family: var(--main-font);
+}
+
+input,
+input::placeholder {
+  font-family: inherit;
 }
 
 /* FIX: Make the Logo visible in Light Mode */
@@ -212,6 +218,10 @@ a {
   color: inherit;
 }
 
+button {
+  font-family: inherit;
+}
+
 /* Language Selector Styles */
 .lang-switch {
   display: flex;
@@ -223,10 +233,19 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.1);
   font-size: 22px;
 }
+
+[data-theme='light'] .lang-switch {
+  border: 1px solid var(--text-main);
+}
+
+[data-theme='light'] .lang-switch a:hover {
+  color: #020617;
+}
+
 .lang-switch a {
   color: #aaa;
   text-decoration: none;
-  font-size: 0.85rem;
+  font-size: 20px;
   font-weight: 600;
   transition: 0.3s;
 }
@@ -241,8 +260,8 @@ a {
 /* Sidebar - Frosted Glass */
 .sidebar {
   background: var(--surface-dark);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  /* backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%); */
   border-right: 1px solid var(--glass-border);
   padding: 2rem;
   display: flex;
@@ -331,8 +350,8 @@ header {
   padding: 1.25rem 1.5rem;
   background: var(--surface-dark);
   border-radius: 20px;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  /* backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px); */
   border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-glass);
   animation: slideDown 0.6s var(--ease-elastic) backwards;
@@ -394,8 +413,8 @@ header {
     rgba(30, 41, 59, 0.4),
     rgba(15, 23, 42, 0.4)
   );
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  /* backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px); */
   border: 1px solid var(--glass-border);
   /* Top highlight for 3D glass effect */
   box-shadow:
@@ -472,9 +491,6 @@ header {
 .stat-card p {
   font-size: 1.8rem;
   font-weight: 700;
-  background: linear-gradient(to right, var(--text-main), var(--text-muted));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .icon-box {
@@ -567,7 +583,7 @@ th {
 tbody tr {
   background: rgba(30, 41, 59, 0.3);
   transition: all 0.2s;
-  backdrop-filter: blur(10px);
+  /* backdrop-filter: blur(10px); */
   font-size: inherit;
 }
 
@@ -671,13 +687,12 @@ textarea {
 }
 
 input:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(var(--bg-dark), 0.3);
 }
 
 input:focus {
   border-color: var(--primary);
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(var(--bg-dark), 0.4);
   box-shadow:
     0 0 0 4px rgba(99, 102, 241, 0.15),
     0 0 20px var(--primary-glow);
@@ -717,7 +732,8 @@ input:focus {
   border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 1rem;
+  font-family: inherit;
+  font-size: 20px;
   margin-top: 1rem;
   transition: all 0.3s var(--ease-elastic);
   box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
@@ -812,6 +828,11 @@ input:focus {
   box-shadow: 0 0 15px var(--danger-glow);
 }
 
+.btn-request-details {
+  color: var(--warning);
+  border: 1px solid var(--warning);
+}
+
 .btn-icon.cancel {
   border-color: var(--danger);
   color: var(--danger);
@@ -831,9 +852,7 @@ input:focus {
 .card-header h2 {
   font-size: 1.25rem;
   font-weight: 700;
-  background: linear-gradient(to right, var(--text-main), var(--text-muted));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--text-main);
 }
 
 .btn-text {
@@ -857,15 +876,14 @@ input:focus {
 
 /* Toolbar & Search */
 .toolbar {
-  display: flex;
+  display: none;
   justify-content: space-between;
   margin-bottom: 2rem;
   gap: 1rem;
 }
 
 .search-bar {
-  background: rgba(var(--surface-dark), 0.4);
-  backdrop-filter: blur(10px);
+  background: var(--surface-dark);
   border: 1px solid var(--glass-border);
   border-radius: 14px;
   padding: 0 1.25rem;
@@ -879,24 +897,21 @@ input:focus {
   width: 300px;
 }
 
-.search-bar:focus-within {
+/* .search-bar:focus-within {
   border-color: var(--primary);
   box-shadow:
     0 0 0 2px rgba(99, 102, 241, 0.15),
     0 5px 20px rgba(0, 0, 0, 0.2);
   background: rgba(15, 23, 42, 0.6);
-}
+} */
 
 .search-bar input {
-  background: transparent;
   border: none;
   padding: 14px 0;
   box-shadow: none;
 }
 .search-bar input:focus {
-  background: transparent;
-  box-shadow: none;
-  transform: none;
+  background-color: var(--surface-dark);
 }
 
 /* User Avatars in Table */
@@ -1021,9 +1036,9 @@ input:focus {
 }
 
 .login-card {
-  background: rgba(30, 41, 59, 0.5);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
+  background: var(--bg-dark);
+  /* backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px); */
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 3.5rem;
   border-radius: 30px;
@@ -1036,6 +1051,11 @@ input:focus {
   position: relative;
   z-index: 2;
   animation: zoomIn 0.8s var(--ease-elastic);
+}
+
+[data-theme='light'] .login-card input {
+  background: #f8fafc;
+  border-color: #cbd5e1;
 }
 
 @keyframes zoomIn {
@@ -1168,8 +1188,13 @@ input:focus {
 .price {
   font-size: 1.5rem;
   font-weight: 800;
-  color: white;
+  color: var(--text-main);
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
 }
 
 .stock {
@@ -1183,7 +1208,7 @@ input:focus {
 }
 
 .qty-control {
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--bg-dark);
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 4px;
   border-radius: 14px;
@@ -1232,7 +1257,7 @@ input:focus {
 /* Toast Notification */
 .toast {
   background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(16px);
+  /* backdrop-filter: blur(16px); */
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   transform-origin: bottom right;
@@ -1256,18 +1281,13 @@ input:focus {
   );
 }
 
-/* Modal */
-.custom-modal::backdrop {
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-}
-
 .modal-content {
-  background: rgba(30, 41, 59, 0.7);
-  backdrop-filter: blur(40px);
+  background: var(--bg-dark);
+  /* backdrop-filter: blur(40px); */
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   animation: popIn 0.4s var(--ease-elastic);
+  color: var(--text-main);
 }
 
 @keyframes popIn {
@@ -1330,6 +1350,61 @@ input:focus {
   display: none;
 }
 
+/* --- CENTERED DIALOG / MODAL --- */
+/* Add this to your existing @media block */
+
+.modal-content {
+  /* Fixed Positioning to float above everything */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+
+  /* Perfect Centering */
+  transform: translate(-50%, -50%);
+
+  /* Sizing for Mobile */
+  width: 90%;
+  max-width: 35rem; /* 350px max width */
+  max-height: 90vh;
+  overflow-y: auto;
+
+  /* Visuals */
+  background: var(--bg-dark);
+  border: 0.1rem solid var(--border-color);
+  border-radius: 2rem;
+  padding: 2.5rem;
+  z-index: 2000;
+
+  /* Shadow for depth */
+  box-shadow: 0 2.5rem 5rem rgba(0, 0, 0, 0.5);
+
+  /* Entrance Animation */
+  animation: popCenter 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Backdrop (Optional: Darkens background behind dialog) */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-dark);
+  z-index: 1999;
+}
+
+/* Animation that respects the centering transform */
+@keyframes popCenter {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -40%) scale(0.9); /* Start slightly lower & smaller */
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1); /* End perfectly centered */
+  }
+}
+
 /* 2. Styles for Mobile Screens (Phones) */
 @media (max-width: 768px) {
   body,
@@ -1351,6 +1426,11 @@ input:focus {
     display: block !important;
     height: auto !important; /* Let it grow as tall as the content needs */
     overflow: visible !important;
+  }
+
+  .breakdown-card {
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .stat-card {
@@ -1418,8 +1498,8 @@ input:focus {
     width: 100%;
     height: 70px;
     background: rgba(15, 23, 42, 0.95); /* Deep dark background */
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    /* backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px); */
     border-top: 1px solid var(--glass-border);
     z-index: 1000;
     box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
@@ -1432,7 +1512,8 @@ input:focus {
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    color: var(--text-muted);
+    color: var(--text-main);
+    background-color: var(--bg-dark);
     font-size: 0.75rem;
     gap: 4px;
     flex: 1; /* Distribute space evenly */
@@ -1455,25 +1536,6 @@ input:focus {
     text-shadow: 0 0 15px var(--primary-glow);
   }
 
-  /* Floating Action Button (FAB) Style for the middle item */
-  .nav-item .fab {
-    width: 48px;
-    height: 48px;
-    background: linear-gradient(135deg, var(--primary), #7c3aed);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    box-shadow: 0 4px 15px var(--primary-glow);
-    transform: translateY(-20px); /* Move it up slightly */
-    border: 4px solid #0f172a; /* Match body bg to create "cutout" effect */
-  }
-
-  .nav-item .fab i {
-    font-size: 1.5rem;
-  }
-
   /* Ripple Effect on Click */
   .nav-item:active {
     transform: scale(0.95);
@@ -1486,14 +1548,14 @@ input:focus {
     overflow-x: auto; /* Enable horizontal scrollbar for table */
     white-space: nowrap; /* Keep rows on one line */
     -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    font-size: 11px;
   }
 
   .product-info h3 {
     font-size: 2rem;
   }
 
-  .price-row {
-    display: flex;
-    justify-content: space-between;
+  header h1 {
+    display: none;
   }
 }

@@ -75,7 +75,7 @@ exports.redirectIfLoggedIn = (req, res, next) => {
     if (decoded.role === 'admin') {
       return res.redirect('/admin/dashboard');
     } else if (decoded.role === 'user') {
-      return res.redirect('/user/medicines'); // Or /user/my-orders
+      return res.redirect('/user/dashboard'); // Or /user/my-orders
     }
 
     // Fallback

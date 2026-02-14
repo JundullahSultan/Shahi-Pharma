@@ -5,7 +5,7 @@
   "meds": "Meds",
   "orders": "Orders",
   "exit": "Exit",
-  "request": "New Request",
+  "request": "Request",
   "my_requests": "My Requests",
   "dashboard": "Dashboard",
   "welcome": "Welcome",
@@ -99,7 +99,7 @@
     "adminRole": "Admin"
   },
   "adminMedicines": {
-    "title": "Manage Medicines",
+    "title": "Medicines",
     "inventory": "Medicine Inventory",
     "addNew": "Add New Medicine",
     "company": "Company",
@@ -118,7 +118,7 @@
     "deleteWarning": "This action cannot be undone."
   },
   "adminOrders": {
-    "title": "Manage Orders",
+    "title": "Orders",
     "management": "Order Management",
     "filterAll": "All Orders",
     "deletedMedicine": "Deleted Medicine",
@@ -126,7 +126,7 @@
     "noOrders": "No orders found."
   },
   "adminUsers": {
-    "title": "Manage Users",
+    "title": "Users",
     "management": "User Management",
     "searchPlaceholder": "Search users...",
     "addNew": "+ Add New User",
@@ -147,7 +147,7 @@
     "takeMeLogin": "Fine, Take Me to Login"
   },
   "userRequest": {
-    "pageTitle": "New Request",
+    "pageTitle": "Request",
     "detailsTitle": "Request Details",
     "subtitle": "Request a medicine that is not currently in our stock.",
     "medName": "Medicine Name",

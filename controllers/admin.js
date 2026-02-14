@@ -115,12 +115,14 @@ exports.loginAdmin = async (req, res) => {
 
     // 3. Sign jwt
     const payload = { id: user._id, username: user.name, role: user.role };
-    const token = jwt.sign(payload, process.env.JWT_SECRET);
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: '365d',
+    });
 
     res.cookie('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 1000 * 60 * 60,
+      maxAge: 1000 * 60 * 60 * 24 * 365,
     });
 
     res.redirect('/admin/dashboard');

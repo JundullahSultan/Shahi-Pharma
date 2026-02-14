@@ -140,6 +140,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const editForm = document.getElementById('editMedicineForm');
   const closeEditBtn = document.getElementById('closeEditBtn');
 
+  if (closeEditBtn) {
+    closeEditBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      editModal.close();
+    });
+  }
+
+  // Also allow clicking outside the box to close it (Optional but good UX)
+  editModal.addEventListener('click', (e) => {
+    if (e.target === editModal) {
+      editModal.close();
+    }
+  });
+
   // A. Attach Click Event to all "Pencil" icons
   document.querySelectorAll('.edit-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
