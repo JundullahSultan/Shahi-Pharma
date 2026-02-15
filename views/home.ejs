@@ -6,8 +6,8 @@
     
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#6c5ce7">
-    <link rel="apple-touch-icon" href="/img/logo.png">
-    <link rel="icon" type="image/png" href="/img/logo.png">
+    <link rel="apple-touch-icon" href="/img/logo.jpeg">
+    <link rel="icon" type="image/jpeg" href="/img/logo.jpeg">
 
 
     <title><%- t.meta.title %></title>
@@ -45,6 +45,21 @@
         background: rgba(255, 255, 255, 0.85); /* White Glass */
         border-bottom: 1px solid rgba(0,0,0,0.05);
       }
+
+      /* --- Icon Toggling Logic --- */
+
+/* Default (Dark Mode): Show Moon, Hide Sun */
+#icon-moon { display: block; }
+#icon-sun { display: none; }
+
+/* Light Mode: Hide Moon, Show Sun */
+[data-theme='light'] #icon-moon {
+    display: none;
+}
+[data-theme='light'] #icon-sun {
+    display: block;
+    color: #f59e0b; /* Make the sun orange/yellow */
+}
 
       .nav-logo {
         display: flex;
@@ -287,8 +302,9 @@
         </div>
 
         <button id="themeToggle" class="btn-icon" style="width: 40px; height: 40px; border-radius: 50%; background: var(--surface-light); color: var(--text-main);">
-                        <i class="ph ph-moon" id="themeIcon"></i>
-        </button>
+    <i class="ph ph-moon" id="icon-moon"></i>
+    <i class="ph ph-sun" id="icon-sun"></i>
+</button>
 
         <a href="#features" class="nav-link"><%- t.navbar.about %></a>
       </div>
@@ -336,42 +352,34 @@
 </section>
 <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const toggleBtn = document.getElementById('themeToggle');
-            const themeIcon = document.getElementById('themeIcon');
-            const htmlEl = document.documentElement;
+    const toggleBtn = document.getElementById('themeToggle');
+    const htmlEl = document.documentElement;
 
-            // 1. Load Saved Theme
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            if (savedTheme === 'light') applyLight();
-            else applyDark();
+    // 1. Load Saved Theme
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') {
+        htmlEl.setAttribute('data-theme', 'light');
+    } else {
+        htmlEl.removeAttribute('data-theme');
+    }
 
-            // 2. Toggle Logic
-            if(toggleBtn) {
-                toggleBtn.addEventListener('click', () => {
-                    const currentTheme = htmlEl.getAttribute('data-theme');
-                    if (currentTheme === 'light') applyDark();
-                    else applyLight();
-                });
-            }
-
-            function applyLight() {
-                htmlEl.setAttribute('data-theme', 'light');
-                localStorage.setItem('theme', 'light');
-                if(themeIcon) {
-                    themeIcon.classList.replace('ph-moon', 'ph-sun');
-                    themeIcon.style.color = "#f59e0b";
-                }
-            }
-
-            function applyDark() {
+    // 2. Toggle Logic
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlEl.getAttribute('data-theme');
+            
+            if (currentTheme === 'light') {
+                // Switch to Dark
                 htmlEl.removeAttribute('data-theme');
                 localStorage.setItem('theme', 'dark');
-                if(themeIcon) {
-                    themeIcon.classList.replace('ph-sun', 'ph-moon');
-                    themeIcon.style.color = "var(--text-main)";
-                }
+            } else {
+                // Switch to Light
+                htmlEl.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
             }
         });
+    }
+});
     </script>
 
 <%- include('./partials/footer') %>

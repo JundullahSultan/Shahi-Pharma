@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/admin.js');
 const authentication = require('../middleware/auth.js');
+const aiController = require('../controllers/ai');
 
 // ==========================================
 // 1. PUBLIC ROUTES (No Login Required)
@@ -98,6 +99,7 @@ router.put(
   adminController.updateRequestStatus,
 );
 
-module.exports = router;
+router.get('/ai', authentication.verifyAdmin, aiController.getAiPage);
+router.post('/ai/chat', authentication.verifyAdmin, aiController.chatWithData);
 
 module.exports = router;

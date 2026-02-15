@@ -6,8 +6,8 @@
 
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#6c5ce7">
-    <link rel="apple-touch-icon" href="/img/logo.png">
-    <link rel="icon" type="image/png" href="/img/logo.png">
+    <link rel="apple-touch-icon" href="/img/logo.jpeg">
+    <link rel="icon" type="image/jpeg" href="/img/logo.jpeg">
 
     <title><%= title %> | <%= t.common.pharmaAdmin %></title>
     
@@ -43,6 +43,9 @@
                 <a href="/admin/requests" class="<%= page === 'requests' ? 'active' : '' %>">
                     <i class="ph ph-hand-waving"></i> <%= t.common.requests %>
                 </a>
+                <a href="/admin/ai" class="<%= page === 'ai' ? 'active' : '' %>">
+    <i class="ph ph-robot"></i> AI Analyst
+</a>
             </nav>
 
             <div class="logout">
