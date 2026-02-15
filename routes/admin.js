@@ -102,4 +102,10 @@ router.put(
 router.get('/ai', authentication.verifyAdmin, aiController.getAiPage);
 router.post('/ai/chat', authentication.verifyAdmin, aiController.chatWithData);
 
+router.get(
+  '/settings',
+  authentication.verifyAdmin,
+  adminController.getSettings,
+);
+
 module.exports = router;

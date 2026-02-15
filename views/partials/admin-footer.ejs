@@ -1,45 +1,92 @@
+<div class="mobile-spacer" style="height: 100px;"></div>
+        </main> </div> <div id="adminMoreMenu" class="expanded-menu">
+        <div class="menu-grid">
+            <a href="/admin/requests" class="menu-item <%= page === 'requests' ? 'active' : '' %>">
+                <div class="icon-box"><i class="ph ph-hand-waving"></i></div>
+                <span>Requests</span>
+            </a>
 
+            <a href="/admin/ai" class="menu-item <%= page === 'ai' ? 'active' : '' %>">
+                <div class="icon-box"><i class="ph ph-robot"></i></div>
+                <span>AI Analyst</span>
+            </a>
 
-    <div class="mobile-spacer" style="height: 100px;"></div>
-        </main> </div> <nav class="mobile-bottom-nav">
+            <a href="/admin/settings" class="menu-item">
+                <div class="icon-box"><i class="ph ph-gear"></i></div>
+                <span>Settings</span>
+            </a>
+
+            <a href="/admin/logout" class="menu-item">
+                <div class="icon-box danger"><i class="ph ph-sign-out"></i></div>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <nav class="mobile-bottom-nav">
         <a href="/admin/dashboard" class="nav-item <%= page === 'dashboard' ? 'active' : '' %>">
             <i class="ph ph-squares-four"></i>
-            <span><%- t.home %></span>
+            <span>Home</span>
         </a>
+
         <a href="/admin/users" class="nav-item <%= page === 'users' ? 'active' : '' %>">
             <i class="ph ph-users"></i>
-            <span><%- t.users %></span>
+            <span>Users</span>
         </a>
+
         <a href="/admin/medicines" class="nav-item <%= page === 'medicines' ? 'active' : '' %>">
-            <div class="fab"><i class="ph ph-plus"></i></div>
-            <span><%- t.meds %></span>
+            <div class="fab"><i class="ph ph-flask"></i></div>
+            <span>Meds</span>
         </a>
+
         <a href="/admin/orders" class="nav-item <%= page === 'orders' ? 'active' : '' %>">
             <i class="ph ph-package"></i>
-            <span><%- t.orders %></span>
+            <span>Orders</span>
         </a>
-        <a href="/admin/requests" class="nav-item <%= page === 'requests' ? 'active' : '' %>">
-            <i class="ph ph-hand-waving"></i>
-            <span><%- t.request %></span>
-        </a>
-        <a href="/admin/logout" class="nav-item">
-            <i class="ph ph-sign-out"></i>
-            <span><%- t.exit %></span>
-        </a>
+
+        <button class="nav-item" onclick="toggleAdminMenu()" style="background:var(--bg-dark); border:none; color: inherit; font-family: inherit;">
+            <i class="ph ph-dots-three-circle" id="adminMoreIcon"></i>
+            <span>More</span>
+        </button>
     </nav>
 
     <script>
+        // Toggle Logic for Admin Menu
+        function toggleAdminMenu() {
+            const menu = document.getElementById('adminMoreMenu');
+            const icon = document.getElementById('adminMoreIcon');
+            
+            menu.classList.toggle('active');
+            
+            if (menu.classList.contains('active')) {
+                icon.classList.replace('ph-dots-three-circle', 'ph-x-circle');
+                icon.style.color = "var(--primary)";
+            } else {
+                icon.classList.replace('ph-x-circle', 'ph-dots-three-circle');
+                icon.style.color = "inherit";
+            }
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('adminMoreMenu');
+            const btn = document.querySelector('button[onclick="toggleAdminMenu()"]');
+            
+            if (menu && btn && !menu.contains(e.target) && !btn.contains(e.target) && menu.classList.contains('active')) {
+                toggleAdminMenu();
+            }
+        });
+
+        // Theme Switcher Logic (Existing)
         document.addEventListener('DOMContentLoaded', () => {
             const toggleBtn = document.getElementById('themeToggle');
             const themeIcon = document.getElementById('themeIcon');
             const htmlEl = document.documentElement;
 
-            // 1. Load Saved Theme
             const savedTheme = localStorage.getItem('theme') || 'dark';
             if (savedTheme === 'light') applyLight();
             else applyDark();
 
-            // 2. Toggle Logic
             if(toggleBtn) {
                 toggleBtn.addEventListener('click', () => {
                     const currentTheme = htmlEl.getAttribute('data-theme');
@@ -67,16 +114,5 @@
             }
         });
     </script>
-    <script>
-    // This highlights the icon that matches the current page URL
-    const currentPath = window.location.pathname;
-    document.querySelectorAll('.mobile-bottom-nav a').forEach(link => {
-        if (link.getAttribute('href') === currentPath) {
-            link.classList.add('active');
-        }
-    });
-</script><script src="/js/admin-orders.js"></script>
-    <script src="/js/admin.js"></script>
-    <script src="/js/distroyGoBack.js"></script>
 </body>
 </html>

@@ -1,3 +1,17 @@
+<div id="userMoreMenu" class="expanded-menu">
+    <div class="menu-grid">
+        <a href="/user/settings" class="menu-item">
+            <div class="icon-box"><i class="ph ph-gear"></i></div>
+            <span>Settings</span>
+        </a>
+
+        <a href="/user/logout" class="menu-item">
+            <div class="icon-box danger"><i class="ph ph-sign-out"></i></div>
+            <span><%= t.exit %></span>
+        </a>
+    </div>
+</div>
+
 <nav class="mobile-bottom-nav">
     <a href="/user/dashboard" class="nav-item <%= page === 'dashboard' ? 'active' : '' %>">
         <i class="ph ph-squares-four"></i>
@@ -21,8 +35,35 @@
         <span><%= t.orders %></span>
     </a>
 
-    <a href="/user/logout" class="nav-item">
-        <i class="ph ph-sign-out"></i>
-        <span><%= t.exit %></span>
-    </a>
+    <button class="nav-item" onclick="toggleUserMenu()" style="background:var(--bg-dark); border:none; color: inherit; font-family: inherit;">
+        <i class="ph ph-dots-three-circle" id="userMoreIcon"></i>
+        <span>More</span>
+    </button>
 </nav>
+
+<script>
+    function toggleUserMenu() {
+        const menu = document.getElementById('userMoreMenu');
+        const icon = document.getElementById('userMoreIcon');
+        
+        menu.classList.toggle('active');
+        
+        if (menu.classList.contains('active')) {
+            icon.classList.replace('ph-dots-three-circle', 'ph-x-circle');
+            icon.style.color = "var(--primary)";
+        } else {
+            icon.classList.replace('ph-x-circle', 'ph-dots-three-circle');
+            icon.style.color = "inherit";
+        }
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        const menu = document.getElementById('userMoreMenu');
+        const btn = document.querySelector('button[onclick="toggleUserMenu()"]');
+        
+        if (menu && btn && !menu.contains(e.target) && !btn.contains(e.target) && menu.classList.contains('active')) {
+            toggleUserMenu();
+        }
+    });
+</script>

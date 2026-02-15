@@ -18,4 +18,6 @@ router.get('/request', auth.verifyUser, userController.sendRequestPage);
 router.post('/request', auth.verifyUser, userController.createRequest);
 router.get('/my-requests', auth.verifyUser, userController.getMyRequests);
 
+router.get('/settings', auth.verifyUser, userController.getSettings);
+
 module.exports = router;

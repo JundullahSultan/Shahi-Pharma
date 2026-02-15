@@ -43,6 +43,9 @@
                 <a href="/admin/requests" class="<%= page === 'requests' ? 'active' : '' %>">
                     <i class="ph ph-hand-waving"></i> <%= t.common.requests %>
                 </a>
+                <a href="/admin/settings" class="<%= page === 'settings' ? 'active' : '' %>">
+                    <i class="ph ph-gear"></i> <%= t.common.settings %>
+                </a>
                 <a href="/admin/ai" class="<%= page === 'ai' ? 'active' : '' %>">
     <i class="ph ph-robot"></i> AI Analyst
 </a>
@@ -53,22 +56,7 @@
             </div>
         </aside>
 
-        <main class="main-content">
+            <main class="main-content">
             <header>
-    
                 <h1><%= title %></h1>
-                
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <button id="themeToggle" class="btn-icon" style="width: 40px; height: 40px; border-radius: 50%; background: var(--surface-light); color: var(--text-main);">
-                        <i class="ph ph-moon" id="themeIcon"></i>
-                    </button>
-
-                    <div class="user-profile">
-                        <span><%= typeof adminName !== 'undefined' ? adminName : t.common.admin %></span>
-                        <div class="avatar">
-                            <%= typeof adminName !== 'undefined' ? adminName[0].toUpperCase() : 'A' %>
-                        </div>
-      
-                    </div>
-                </div>
             </header>

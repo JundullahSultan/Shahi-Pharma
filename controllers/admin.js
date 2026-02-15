@@ -315,3 +315,14 @@ exports.updateRequestStatus = async (req, res) => {
     res.status(500).json({ message: 'Error updating status' });
   }
 };
+
+exports.getSettings = (req, res) => {
+  // Safety Check: If req.user.name is missing, use 'Admin'
+  const name = req.user && req.user.name ? req.user.name : 'Admin';
+
+  res.render('admin-settings', {
+    title: 'Settings',
+    page: 'settings',
+    adminName: name, // Now it will always have a value
+  });
+};

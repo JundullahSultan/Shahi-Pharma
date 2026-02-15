@@ -175,3 +175,25 @@ exports.getMyOrders = async (req, res) => {
     res.status(500).send('Server Error');
   }
 };
+
+exports.getSettings = async (req, res) => {
+  try {
+    // 1. Fetch the full user details from Database
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    // 2. Render the page with the 'user' object
+    res.render('user/user-settings', {
+      title: 'Settings',
+      page: 'settings',
+      user: user, // This sends the full user object
+      userName: user.name, // This sends just the name for header compatibility
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+};

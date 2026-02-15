@@ -73,7 +73,8 @@
     "medicines": "Medicines",
     "requests": "Requests",
     "new": "New",
-    "admin": "Admin"
+    "admin": "Admin",
+    "settings": "Settings"
   },
   "auth": {
     "welcomeBack": "Welcome Back",
@@ -209,5 +210,25 @@
     "thDate": "Date Requested",
     "thStatus": "Status",
     "noRequestsIcon": "No requests found."
+  },
+  "settings": {
+    "title": "Settings",
+    "role": "Administrator",
+    "appearance": "Appearance",
+    "appearanceDesc": "Switch between Dark and Light mode.",
+    "language": "Language",
+    "languageDesc": "Change dashboard language",
+    "logout": "Logout"
+  },
+  "aiAnalyst": {
+    "title": "Shahi AI Analyst",
+    "welcome": "Hello Admin! I have analyzed your latest data. Ask me anything like:",
+    "q1": "Which medicines are running low?",
+    "q2": "Who ordered recently?",
+    "q3": "How many users do we have?",
+    "placeholder": "Ask about your inventory, orders, or users...",
+    "thinking": "Thinking...",
+    "error": "Error connecting to AI.",
+    "noResponse": "Error: No response from server."
   }
 }

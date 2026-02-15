@@ -1,102 +1,100 @@
-<%- include('partials/admin-header') %>
+<!DOCTYPE html>
+<html lang="<%= lang %>" dir="<%= dir %>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#6c5ce7">
+    <link rel="apple-touch-icon" href="/img/logo.jpeg">
+    <link rel="icon" type="image/jpeg" href="/img/logo.jpeg">
 
-<section class="card" style="height: 80vh; display: flex; flex-direction: column;">
-    <div class="card-header">
-        <h2><i class="ph ph-sparkle" style="color: var(--primary);"></i> Shahi AI Manager</h2>
-    </div>
 
-    <div id="chatBox" style="flex: 1; overflow-y: auto; padding: 20px; background: rgba(0,0,0,0.2); border-radius: 12px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 15px;">
-        <div class="message bot">
-            <div class="bubble">
-                👋 Hey Boss! I'm connected to the database. <br><br>
-                Ask me about stocks, orders, or just tell me a joke. I know everything happening in Shahi Pharma right now! 💊✨
+    <title><%= title %> | <%= t.common.pharmaB2B %></title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/admin-style.css">
+    
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="ph ph-pill"></i>
+                <span><%= t.common.pharmaB2B %></span>
             </div>
-        </div>
-    </div>
+      
+            <nav>
+                <a href="/user/dashboard" class="<%= page === 'dashboard' ? 'active' : '' %>">
+                    <i class="ph ph-squares-four"></i> <%= t.dashboard %>
+                </a>
+                <a href="/user/request" class="<%= page === 'request' ? 'active' : '' %>">
+   
+                    <i class="ph ph-plus-circle"></i> <%= t.request %>
+                </a>
+                <a href="/user/my-requests" class="<%= page === 'my-requests' ? 'active' : '' %>">
+                    <i class="ph ph-notebook"></i> <%= t.my_requests %>
+             
+                </a>
+                <a href="/user/orders" class="<%= page === 'orders' ? 'active' : '' %>">
+                    <i class="ph ph-package"></i> <%= t.userOrders.myOrders %>
+                </a>
+                <a href="/user/settings" class="<%= page === 'settings' ? 'active' : '' %>">
+                    <i class="ph ph-gear"></i> <%= t.common.settings %>
+                </a>
+            </a>
+            </nav>
+            <div class="logout">
+                <a href="/user/logout"><i class="ph ph-sign-out"></i> <%= t.common.logout %></a>
+            
+            </div>
+        </aside>
 
-    <form id="aiForm" style="display: flex; gap: 10px;">
-        <input type="text" id="userQuestion" placeholder="Ask anything..." required 
-               style="flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--bg-dark); color: var(--text-main);">
-        <button type="submit" class="btn-primary" style="padding: 0 25px;">
-            <i class="ph ph-paper-plane-right"></i>
-        </button>
-    </form>
-</section>
+        <main class="main-content">
+            <header>
+                <h1><%= title %></h1>
+            </header>
+            <script>
+    // 1. Get Elements
+    const toggleBtn = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const htmlEl = document.documentElement;
 
-<style>
-    .message { display: flex; width: 100%; }
-    .message.user { justify-content: flex-end; }
-    .message.bot { justify-content: flex-start; }
+    // 2. Load Saved Theme on Startup
+    const savedTheme = localStorage.getItem('theme') || 'dark';
     
-    .bubble {
-        max-width: 75%;
-        padding: 12px 18px;
-        border-radius: 12px;
-        line-height: 1.5;
-        font-size: 0.95rem;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    if (savedTheme === 'light') {
+        applyLight();
+    } else {
+        applyDark();
     }
-    
-    .message.user .bubble {
-        background: var(--primary);
-        color: white;
-        border-bottom-right-radius: 2px;
-    }
-    
-    .message.bot .bubble {
-        background: var(--surface-light);
-        color: var(--text-main);
-        border: 1px solid var(--glass-border);
-        border-bottom-left-radius: 2px;
-    }
-</style>
 
-<script>
-    const chatBox = document.getElementById('chatBox');
-    const form = document.getElementById('aiForm');
-    const input = document.getElementById('userQuestion');
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const text = input.value;
-        if(!text) return;
-
-        // 1. Show User Message
-        addMessage(text, 'user');
-        input.value = '';
-        
-        // 2. Show Loading Animation
-        const loadingId = addMessage('Thinking...', 'bot');
-
-        try {
-            // 3. Send to Backend
-            const res = await fetch('/admin/ai/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: text }) // Matches 'req.body.message' in Controller
-            });
-
-            const data = await res.json();
-
-            // 4. Update Bot Response
-            const botBubble = document.getElementById(loadingId);
-            botBubble.innerText = data.response; // Matches 'res.json({ response: ... })' in Controller
-
-        } catch (err) {
-            document.getElementById(loadingId).innerText = "❌ Connectivity Error. Check console.";
-            console.error(err);
+    // 3. Toggle Logic
+    toggleBtn.addEventListener('click', () => {
+        const currentTheme = htmlEl.getAttribute('data-theme');
+  
+        if (currentTheme === 'light') {
+            applyDark();
+        } else {
+            applyLight();
         }
     });
+    // --- Helper Functions ---
+    function applyLight() {
+        htmlEl.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+        themeIcon.classList.replace('ph-moon', 'ph-sun');
+        themeIcon.style.color = "#f59e0b"; // Orange Sun
+    }
 
-    function addMessage(text, sender) {
-        const div = document.createElement('div');
-        div.className = `message ${sender}`;
-        const id = 'msg-' + Date.now();
-        div.innerHTML = `<div class="bubble" id="${id}">${text}</div>`;
-        chatBox.appendChild(div);
-        chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to bottom
-        return id;
+    function applyDark() {
+        htmlEl.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'dark');
+        themeIcon.classList.replace('ph-sun', 'ph-moon');
+        themeIcon.style.color = "var(--text-main)";
     }
 </script>
-
-<%- include('partials/admin-footer', { page: 'ai' }) %>
