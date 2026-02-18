@@ -477,15 +477,21 @@ header {
 }
 
 .stat-card h3 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: var(--text-muted);
-  margin: 1rem 0 1rem 3rem;
+  text-align: left;
+}
+
+.stat-card-number {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .stat-card p {
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   font-weight: 700;
 }
 
@@ -1672,4 +1678,189 @@ input:focus {
   background: var(--primary);
   color: white;
   box-shadow: 0 2px 10px var(--primary-glow);
+}
+
+/* =========================================
+   NEW: CUSTOM CONFIRMATION & TOAST UI
+   ========================================= */
+
+.custom-backdrop .modal-content {
+  position: relative !important; /* Stop it from trying to center itself */
+  top: auto !important;
+  left: auto !important;
+  transform: none !important; /* Remove the old centering transform */
+  margin: 0 !important; /* Let Flexbox handle the margin */
+  max-height: 90vh; /* Prevent it from being taller than screen */
+  overflow-y: auto; /* Scroll inside modal if content is huge */
+  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* Backdrop to darken the screen */
+.custom-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw; /* Use viewport width */
+  height: 100vh; /* Use viewport height */
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(5px);
+  z-index: 9999; /* Ensure it's on top of everything */
+  display: flex;
+  align-items: center; /* Vertical Center */
+  justify-content: center; /* Horizontal Center */
+
+  /* Hide by default */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+/* 3. Active State */
+.custom-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+
+/* Specific styling for the confirmation box content */
+.confirmation-box {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 400px;
+  /* The base .modal-content style in your CSS handles the glass effect and positioning */
+}
+
+.confirmation-box h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.confirmation-box p {
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* A larger icon for the modal */
+.icon-box.large {
+  width: 80px;
+  height: 80px;
+  font-size: 2.5rem;
+  border-radius: 24px;
+  margin-bottom: 0.5rem;
+}
+
+/* Modal Buttons Layout */
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.modal-actions button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  color: var(--text-muted);
+}
+.btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+}
+
+.btn-delete {
+  background: var(--danger);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px var(--danger-glow);
+}
+.btn-delete:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+}
+
+/* --- TOAST NOTIFICATIONS --- */
+#toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  min-width: 300px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: slideInRight 0.4s var(--ease-elastic);
+  /* Glass style inherited from your theme via classes, or defined here */
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  /* Move Toast to bottom so it's easier to see on phones */
+  #toast-container {
+    top: auto;
+    bottom: 80px; /* Above the bottom nav bar */
+    right: 50%;
+    transform: translateX(50%);
+    width: 90%;
+  }
+
+  .toast {
+    width: 100%;
+    min-width: auto;
+    animation: slideUpFade 0.4s var(--ease-elastic);
+  }
+
+  .custom-backdrop {
+    padding: 20px; /* Prevent touching edges */
+    z-index: 99999;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpFade {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

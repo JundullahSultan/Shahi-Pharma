@@ -2,7 +2,6 @@ const Groq = require('groq-sdk');
 const Medicine = require('../models/Medicines');
 const Order = require('../models/Orders');
 const User = require('../models/Users');
-require('dotenv').config();
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -91,11 +90,9 @@ exports.chatWithData = async (req, res) => {
     res.json({ response: aiResponse });
   } catch (error) {
     console.error('AI Error:', error);
-    res
-      .status(500)
-      .json({
-        response:
-          'My brain circuits are fried (Server Error). Check the console!',
-      });
+    res.status(500).json({
+      response:
+        'My brain circuits are fried (Server Error). Check the console!',
+    });
   }
 };

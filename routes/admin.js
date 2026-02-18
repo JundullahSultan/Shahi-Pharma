@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/admin.js');
 const authentication = require('../middleware/auth.js');
-const aiController = require('../controllers/ai');
+const aiController = require('../controllers/ai.js');
 
 // ==========================================
 // 1. PUBLIC ROUTES (No Login Required)
@@ -14,12 +14,6 @@ router.post('/login', adminController.loginAdmin);
 
 // Logout
 router.get('/logout', adminController.logoutAdmin);
-
-// ==========================================
-// 2. PROTECTED MIDDLEWARE BARRIER
-// ==========================================
-// Any route defined BELOW this line requires the user to be a logged-in Admin.
-// This saves you from writing 'authentication.verifyAdmin' on every single line.
 
 // ==========================================
 // 3. DASHBOARD & ORDERS
@@ -44,7 +38,13 @@ router.put(
 // 4. USER MANAGEMENT
 // ==========================================
 router.get('/users', authentication.verifyAdmin, adminController.sendUsersPage);
-router.post('/users', authentication.verifyAdmin, adminController.createUser);
+// UPDATED: Added uploadImage middleware here
+router.post(
+  '/users',
+  authentication.verifyAdmin,
+  adminController.uploadImage,
+  adminController.createUser,
+);
 router.delete(
   '/users/:id',
   authentication.verifyAdmin,
@@ -106,6 +106,20 @@ router.get(
   '/settings',
   authentication.verifyAdmin,
   adminController.getSettings,
+);
+
+// Delete Request
+router.delete(
+  '/requests/:id',
+  authentication.verifyAdmin,
+  adminController.deleteRequest,
+);
+
+// Delete Order
+router.delete(
+  '/orders/:id',
+  authentication.verifyAdmin,
+  adminController.deleteOrder,
 );
 
 module.exports = router;

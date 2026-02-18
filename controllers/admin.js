@@ -12,8 +12,14 @@ exports.uploadImage = upload.single('imageURL');
 exports.createUser = async (req, res) => {
   const { name, pharmacy, email, password, role } = req.body;
 
-  // Hashing Passowrd
+  // Hashing Password
   const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Handle Image Upload
+  let imageURL = '';
+  if (req.file) {
+    imageURL = req.file.path;
+  }
 
   try {
     const newUser = new User({
@@ -22,6 +28,7 @@ exports.createUser = async (req, res) => {
       email,
       password: hashedPassword,
       role,
+      imageURL, // Save the image URL
     });
 
     await newUser.save();
@@ -158,20 +165,14 @@ exports.deleteUser = async (req, res) => {
 // ==========================================
 exports.createMedicine = async (req, res) => {
   try {
-    const { name, companyName, price, stockQuantity } = req.body;
+    // 1. Get isPublished from the form data
+    const { name, companyName, price, stockQuantity, isPublished } = req.body;
+
     let imageString = '';
 
-    // OLD WAY: Converting Buffer to Base64 (DELETE THIS)
-    // if (req.file) {
-    //   const base64Image = req.file.buffer.toString('base64');
-    //   imageString = `data:${req.file.mimetype};base64,${base64Image}`;
-    // }
-
-    // NEW WAY: Just get the URL from Cloudinary
     if (req.file) {
       imageString = req.file.path;
     } else {
-      // Optional: Set a default placeholder if no image uploaded
       imageString = 'https://placehold.co/400?text=No+Image';
     }
 
@@ -180,7 +181,9 @@ exports.createMedicine = async (req, res) => {
       companyName,
       price,
       stockQuantity,
-      imageURL: imageString, // Saves the Cloudinary URL
+      imageURL: imageString,
+      // 2. Map 'isPublished' (string "true"/"false") to 'public' (Boolean)
+      public: isPublished === 'true',
     });
 
     await newMedicine.save();
@@ -316,13 +319,62 @@ exports.updateRequestStatus = async (req, res) => {
   }
 };
 
-exports.getSettings = (req, res) => {
-  // Safety Check: If req.user.name is missing, use 'Admin'
-  const name = req.user && req.user.name ? req.user.name : 'Admin';
+exports.getSettings = async (req, res) => {
+  try {
+    // Fetch fresh user data from DB to get the image
+    const user = await User.findById(req.user.id);
+    const name = user ? user.name : 'Admin';
 
-  res.render('admin-settings', {
-    title: 'Settings',
-    page: 'settings',
-    adminName: name, // Now it will always have a value
-  });
+    res.render('admin-settings', {
+      title: 'Settings',
+      page: 'settings',
+      adminName: name,
+      user: user, // Pass the full user object to the view
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+};
+
+// ==========================================
+// DELETE REQUEST
+// ==========================================
+exports.deleteRequest = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // 1. Find Request
+    const request = await Request.findById(id);
+    if (!request) return res.status(404).json({ message: 'Request not found' });
+
+    // 2. Delete from Database
+    await Request.findByIdAndDelete(id);
+
+    res.status(200).json({ message: 'Request deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+// ==========================================
+// DELETE ORDER
+// ==========================================
+exports.deleteOrder = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // 1. Find Order
+    const order = await Order.findById(id);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    // 2. Delete from Database
+    await Order.findByIdAndDelete(id);
+
+    res.status(200).json({ message: 'Order deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
 };
