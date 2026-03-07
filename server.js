@@ -14,6 +14,8 @@ const languages = {
 
 const app = express();
 
+app.use(express.static('public', { dotfiles: 'allow' }));
+
 // Allows express to read JSON bodies sent from JavaScript
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
