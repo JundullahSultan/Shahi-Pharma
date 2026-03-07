@@ -41,7 +41,7 @@ router.get('/users', authentication.verifyAdmin, adminController.sendUsersPage);
 // UPDATED: Added uploadImage middleware here
 router.post(
   '/users',
-  authentication.verifyAdmin,
+  // authentication.verifyAdmin,
   adminController.uploadImage,
   adminController.createUser,
 );
