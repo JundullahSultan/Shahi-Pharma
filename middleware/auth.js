@@ -11,7 +11,7 @@ exports.verifyAdmin = (req, res, next) => {
     if (err) return res.render('session-expired'); // Better than sendStatus(403) for UX
 
     // 3. Handle Role Mismatch
-    if (decoded.role !== 'admin' || decoded.role !== 'owner') {
+    if (decoded.role !== 'admin') {
       return res.render('admin-only-error');
     }
 

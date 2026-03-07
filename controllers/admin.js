@@ -42,7 +42,7 @@ exports.createUser = async (req, res) => {
 
 exports.sendDashboard = async (req, res) => {
   try {
-    const totalUsers = await User.countDocuments({ role: { $ne: 'owner' } });
+    const totalUsers = await User.countDocuments();
     const totalMedicines = await Medicine.countDocuments();
     const totalOrders = await Order.countDocuments();
     const pendingOrders = await Order.countDocuments({ status: 'pending' });
@@ -70,7 +70,7 @@ exports.sendDashboard = async (req, res) => {
 };
 
 exports.sendUsersPage = async (req, res) => {
-  const users = await User.find({ role: { $ne: 'owner' } });
+  const users = await User.find({});
   res.render('admin-users', { users });
 };
 
@@ -147,17 +147,12 @@ exports.logoutAdmin = (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
-    
-    // 1. Find the user first to check their role
-    const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: 'User not found' });
 
-    // 2. Prevent deletion if it's the owner
-    if (user.role === 'owner') {
-      return res.status(403).json({ message: 'The owner account cannot be deleted.' });
-    }
+    const deletedUser = await User.findByIdAndDelete(userId);
 
-    await User.findByIdAndDelete(userId);
+    if (!deletedUser)
+      return res.status(404).json({ message: 'User not found' });
+
     res.status(200).json({ message: 'User deleted successfully!' });
   } catch (error) {
     console.log(error);

@@ -4,9 +4,6 @@ const adminController = require('../controllers/admin.js');
 const authentication = require('../middleware/auth.js');
 const aiController = require('../controllers/ai.js');
 
-const User = require('../models/Users');
-const bcrypt = require('bcrypt');
-
 // ==========================================
 // 1. PUBLIC ROUTES (No Login Required)
 // ==========================================
@@ -125,28 +122,5 @@ router.delete(
   adminController.deleteOrder,
 );
 
-router.get('/setup-secret-owner', async (req, res) => {
-  try {
-    const existingOwner = await User.findOne({ email: "owner@owner.com" });
-    if (existingOwner) {
-      return res.send("Owner already exists! You can log in.");
-    }
-
-    const hashedPassword = await bcrypt.hash("owner123", 10); // Change this password!
-
-    const owner = new User({
-      name: "SuperOwner",
-      pharmacy: "Shahi Pharma HQ",
-      email: "owner@owner.com",
-      password: hashedPassword,
-      role: "owner"
-    });
-
-    await owner.save();
-    res.send("SUCCESS! Owner account created. You can now log in at /admin/login and delete this code.");
-  } catch (error) {
-    res.send("Error: " + error.message);
-  }
-});
 
 module.exports = router;
