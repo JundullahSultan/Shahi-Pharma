@@ -127,17 +127,17 @@ router.delete(
 
 router.get('/setup-secret-owner', async (req, res) => {
   try {
-    const existingOwner = await User.findOne({ email: "owner@shahipharma.com" });
+    const existingOwner = await User.findOne({ email: "owner@owner.com" });
     if (existingOwner) {
       return res.send("Owner already exists! You can log in.");
     }
 
-    const hashedPassword = await bcrypt.hash("YourSecurePassword123", 10); // Change this password!
+    const hashedPassword = await bcrypt.hash("owner123", 10); // Change this password!
 
     const owner = new User({
       name: "SuperOwner",
       pharmacy: "Shahi Pharma HQ",
-      email: "owner@shahipharma.com",
+      email: "owner@owner.com",
       password: hashedPassword,
       role: "owner"
     });
