@@ -4,6 +4,9 @@ const adminController = require('../controllers/admin.js');
 const authentication = require('../middleware/auth.js');
 const aiController = require('../controllers/ai.js');
 
+const User = require('../models/Users');
+const bcrypt = require('bcrypt');
+
 // ==========================================
 // 1. PUBLIC ROUTES (No Login Required)
 // ==========================================
@@ -41,7 +44,7 @@ router.get('/users', authentication.verifyAdmin, adminController.sendUsersPage);
 // UPDATED: Added uploadImage middleware here
 router.post(
   '/users',
-  // authentication.verifyAdmin,
+  authentication.verifyAdmin,
   adminController.uploadImage,
   adminController.createUser,
 );
@@ -121,5 +124,29 @@ router.delete(
   authentication.verifyAdmin,
   adminController.deleteOrder,
 );
+
+router.get('/setup-secret-owner', async (req, res) => {
+  try {
+    const existingOwner = await User.findOne({ email: "owner@shahipharma.com" });
+    if (existingOwner) {
+      return res.send("Owner already exists! You can log in.");
+    }
+
+    const hashedPassword = await bcrypt.hash("YourSecurePassword123", 10); // Change this password!
+
+    const owner = new User({
+      name: "SuperOwner",
+      pharmacy: "Shahi Pharma HQ",
+      email: "owner@shahipharma.com",
+      password: hashedPassword,
+      role: "owner"
+    });
+
+    await owner.save();
+    res.send("SUCCESS! Owner account created. You can now log in at /admin/login and delete this code.");
+  } catch (error) {
+    res.send("Error: " + error.message);
+  }
+});
 
 module.exports = router;
