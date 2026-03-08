@@ -44,7 +44,15 @@
                     <td><%= user.joined %></td>
                     <td>
                         <div class="actions">
-                            <button class="btn-icon cancel" title="<%= t.common.delete %>" onclick="deleteUser('<%= user._id%>')"><i class="ph ph-trash"></i></button>
+                            <% if (user.email !== 'suhrab@gmail.com') { %>
+                                <button class="btn-icon cancel" title="<%= t.common.delete %>" onclick="deleteUser('<%= user._id%>')">
+                                    <i class="ph ph-trash"></i>
+                                </button>
+                            <% } else { %>
+                                <span class="badge approved" style="background: var(--surface-light); color: var(--text-muted);">
+                                <i class="ph ph-lock-key"></i> Protected
+                                </span>
+                            <% } %>
                         </div>
                     </td>
                 </tr>

@@ -148,10 +148,20 @@ exports.deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
 
-    const deletedUser = await User.findByIdAndDelete(userId);
-
-    if (!deletedUser)
+    // 1. Find the user first to check their email/role
+    const user = await User.findById(userId);
+    
+    if (!user) {
       return res.status(404).json({ message: 'User not found' });
+    }
+
+    // 2. Prevent deletion of the master admin (replace with your desired admin email)
+    if (user.email === 'suhrab@gmail.com') {
+      return res.status(403).json({ message: 'Action restricted: This admin cannot be deleted.' });
+    }
+
+    // 3. Delete from Database
+    await User.findByIdAndDelete(userId);
 
     res.status(200).json({ message: 'User deleted successfully!' });
   } catch (error) {
