@@ -3,7 +3,7 @@ const Medicine = require('../models/Medicines');
 const Order = require('../models/Orders');
 const User = require('../models/Users');
 
-const groq = new Groq({ apiKey: process.env.NEW_GROQ-API });
+const groq = new Groq({ apiKey: process.env.NEW_GROQ_API });
 
 // 1. Render the Page
 exports.getAiPage = (req, res) => {
