@@ -47,11 +47,12 @@ function confirmDelete() {
     const cancelBtn = document.getElementById('cancelBtn');
     const confirmBtn = document.getElementById('confirmDeleteBtn');
 
-    modal.showModal(); // Native Dialog API
+    // Bulletproof open for Android APKs
+    modal.style.display = 'flex'; 
 
     // Handle interactions
     const close = (result) => {
-      modal.close();
+      modal.style.display = 'none'; // Hide modal
       // Remove listeners to prevent memory leaks or double clicks
       cancelBtn.removeEventListener('click', handleCancel);
       confirmBtn.removeEventListener('click', handleConfirm);
@@ -63,11 +64,6 @@ function confirmDelete() {
 
     cancelBtn.addEventListener('click', handleCancel);
     confirmBtn.addEventListener('click', handleConfirm);
-
-    // Close if clicking backdrop
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) close(false);
-    });
   });
 }
 
