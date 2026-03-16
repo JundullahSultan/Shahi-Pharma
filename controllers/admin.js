@@ -49,7 +49,7 @@ exports.sendDashboard = async (req, res) => {
     const approvedOrders = await Order.countDocuments({ status: 'approved' });
     const cancelledOrders = await Order.countDocuments({ status: 'cancelled' });
 
-    const orders = await Order.find()
+    const orders = await Order.find({ status: 'pending' })
       .sort({ createAt: -1 })
       .limit(5)
       .populate('user', 'name')
