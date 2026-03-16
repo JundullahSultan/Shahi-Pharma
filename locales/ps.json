@@ -170,7 +170,7 @@
     "confirmCancel": "دا فرمایش لغوه کړئ؟",
     "emptyState": "تر اوسه هېڅ فرمایش ندی ثبت شوی.",
     "goToMarket": "بازار ته لاړ شئ",
-    "placeOrder": "فرمایش ثبت کړئ",
+    "placeOrder": "فرمایش  ",
     "myOrders": "زما فرمایشونه"
   },
   "adminRequests": {
@@ -198,7 +198,7 @@
   "userDashboard": {
     "title": "ډشبورډ",
     "addToCart": "په ټوکرۍ کې اچول",
-    "placeOrder": "فرمایش ثبت کړئ",
+    "placeOrder": "فرمایش  ",
     "quantityLabel": "تعداد:"
   },
   "userMyRequests": {

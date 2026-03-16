@@ -26,17 +26,16 @@
          
                                 <input type="hidden" name="medicineId" value="<%= med._id %>">
                                 
-                                <div class="qty-control">
-       
+                                <div class="order-placement">
+                                    <div class="qty-control">
                                     <label><%= t.userDashboard.quantityLabel %></label>
                                     <input type="number" name="quantity" min="1" max="<%= med.stock %>" value="1" required>
-                           
-                                </div>
+                                    </div>
 
-                                <button type="submit" class="btn-primary btn-sm">
-                                    <%= t.userDashboard.placeOrder %>
-                       
-                                </button>
+                                    <button type="submit" class="order-btn btn-sm">
+                                        <%= t.userDashboard.placeOrder %>
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </div>

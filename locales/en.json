@@ -170,7 +170,7 @@
     "confirmCancel": "Cancel this order?",
     "emptyState": "No orders found yet.",
     "goToMarket": "Go to Marketplace",
-    "placeOrder": "Place Order",
+    "placeOrder": "Order",
     "myOrders": "My Orders"
   },
   "adminRequests": {
@@ -198,7 +198,7 @@
   "userDashboard": {
     "title": "Dashboard",
     "addToCart": "Add to Cart",
-    "placeOrder": "Place Order",
+    "placeOrder": " Order",
     "quantityLabel": "Quantity:"
   },
   "userMyRequests": {

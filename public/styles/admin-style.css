@@ -946,6 +946,30 @@ input:focus {
   margin-top: 1.5rem;
 }
 
+.order-btn {
+  width: 100%;
+  padding: 5px 0;
+  background: linear-gradient(135deg, var(--primary), #7c3aed);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: inherit;
+  font-size: 15px;
+  margin-top: 1rem;
+  transition: all 0.3s var(--ease-elastic);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.order-placement {
+  display: flex;
+  gap: 1rem;
+}
+
 .full-width {
   grid-column: span 2;
 }
@@ -1135,8 +1159,9 @@ input:focus {
 /* Product Grid */
 .medicine-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(5, 1fr);
   gap: 1rem;
+  font-family: inherit;
 }
 
 .product-card {
@@ -1186,6 +1211,9 @@ input:focus {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  font-family: 'IranSansX';
+  font-size: 11px;
+  font-width: 300;
 }
 
 .price {
@@ -1211,11 +1239,20 @@ input:focus {
 }
 
 .qty-control {
+  position: relative;
+  display: flex;
   background: var(--bg-dark);
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 4px;
   border-radius: 14px;
   margin-top: 1.5rem;
+  width: 150px;
+}
+
+.qty-control label {
+  position: absolute;
+  /* left: -20px; */
+  top: -20px;
 }
 
 .qty-control .btn-sm {
@@ -1556,12 +1593,13 @@ input:focus {
   }
 
   .product-info h3 {
-    font-size: 1.1rem;
+    font-size: 11px;
   }
 
   .medicine-grid {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
+    font-size: 11px;
   }
 }
 

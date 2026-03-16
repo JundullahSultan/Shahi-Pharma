@@ -116,24 +116,6 @@
         if(toastContainer) document.body.appendChild(toastContainer);
     });
 
-    // --- Toast Logic ---
-    function showToast(message, type = 'success') {
-        const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        const icon = type === 'success' ? '<i class="ph ph-check-circle"></i>' : '<i class="ph ph-warning-circle"></i>';
-        
-        toast.className = `toast ${type}`; 
-        toast.innerHTML = `${icon} <span>${message}</span>`;
-        container.appendChild(toast);
-
-        // Remove after 3 seconds
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateY(-20px)';
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
-    }
-
     // --- Modal Logic ---
     const modal = document.getElementById('confirmModal');
     const confirmBtn = document.getElementById('confirmDeleteBtn');
@@ -191,4 +173,5 @@
         }
     });
 </script>
+<script src="/js/admin-orders.js"></script>
         <%- include('partials/admin-footer', { page: 'orders' }) %>
