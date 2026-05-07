@@ -52,6 +52,13 @@ app.use('/admin', adminRuotes);
 app.use('/user', userRoutes);
 
 connectDB();
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-});
+
+// Export the app for Vercel's serverless environment
+module.exports = app;
+
+// Only listen locally if not in production
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(3000, () => {
+        console.log('Server is running on port 3000');
+    });
+}
